@@ -38,7 +38,11 @@ class ModuleInstallCommand extends Command
 
         foreach ($this->files->directories(base_path('vendor')) as $packageDir) {
             foreach ($this->files->directories($packageDir) as $dir) {
-                $composerJson = json_decode($this->files->get($dir.DIRECTORY_SEPARATOR.'composer.json'), true);
+				if( !file_exists($composerFile = $dir.DIRECTORY_SEPARATOR.'composer.json')) {
+					continue;
+				}
+				
+                $composerJson = json_decode($this->files->get($composerFile), true);
 
                 if (
                     ! isset($composerJson['type'])
