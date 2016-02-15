@@ -40,7 +40,15 @@ class ModuleInstallCommand extends Command
             foreach ($this->files->directories($packageDir) as $dir) {
                 $composerJson = json_decode($this->files->get($dir.DIRECTORY_SEPARATOR.'composer.json'), true);
 
-                if (! isset($composerJson['type']) or $composerJson['type'] != 'kodicms-module' or ! isset($composerJson['autoload']['psr-4'])) {
+                if (
+                    ! isset($composerJson['type'])
+                    or
+                    $composerJson['type'] != 'kodicms-module'
+                    or
+                    ! isset($composerJson['autoload']['psr-4'])
+                    or
+                    $composerJson['name'] == 'kodicms/core'
+                ) {
                     continue;
                 }
 
@@ -50,9 +58,13 @@ class ModuleInstallCommand extends Command
                         'namespace' => $namespace,
                         'path'      => $dir.DIRECTORY_SEPARATOR.normalize_path($path)
                     ];
+
+                    $this->info('Include module ['.json_encode($moduleInfo[$pathInfo['basename']]).']');
                 }
             }
         }
+
+
 
         $modulesCachePath = $this->getPath();
         $this->makeDirectory($path);
@@ -60,6 +72,10 @@ class ModuleInstallCommand extends Command
         $stub = $this->files->get($this->getStub());
 
         $this->files->put($modulesCachePath, str_replace('{{modules}}', var_export($moduleInfo, true), $stub));
+
+        $this->call('vendor:publish', [
+            '--tag' => ['kodicms']
+        ]);
     }
 
     /**
