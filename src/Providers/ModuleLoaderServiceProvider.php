@@ -56,10 +56,21 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
 
         ksort($this->providers);
         $this->app->singleton('modules.loader', function () {
-            $modules = config('app.modules', []);
+            $modules = [
+                'API' => [
+                    'namespace' => '\\KodiCMS\\API\\',
+                    'path'      => base_path('vendor'.DIRECTORY_SEPARATOR.'kodicms'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR)
+                ],
+                'CMS' => [
+                    'namespace' => '\\KodiCMS\\CMS\\',
+                    'path'      => base_path('vendor'.DIRECTORY_SEPARATOR.'kodicms'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR)
+                ]
+            ];
+
+            $modules = array_merge($modules, config('app.modules', []));
 
             if (file_exists($path = base_path('bootstrap'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'modules.php'))) {
-                $modules = array_merge($modules + include $path);
+                $modules = array_merge($modules, include $path);
             }
 
             return new ModulesLoader($modules);
