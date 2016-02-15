@@ -12,6 +12,7 @@ use KodiCMS\Assets\AssetsServiceProvider;
 use KodiCMS\Support\Loader\ModulesLoader;
 use KodiCMS\Support\Facades\DatabaseConfig;
 use KodiCMS\ModulesLoader\ModulesFileSystem;
+use KodiCMS\Support\Html\HtmlServiceProvider;
 use KodiCMS\ModulesLoader\ModulesLoaderFacade;
 use KodiCMS\ModulesLoader\ModulesFileSystemFacade;
 use KodiCMS\ModulesLoader\Providers\AppServiceProvider;
@@ -30,7 +31,8 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
         20 => EventServiceProvider::class,
         30 => AppServiceProvider::class,
         40 => ConfigServiceProvider::class,
-        60 => AssetsServiceProvider::class
+        60 => AssetsServiceProvider::class,
+        70 => HtmlServiceProvider::class,
     ];
 
     /**
@@ -53,9 +55,9 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
         }
 
         ksort($this->providers);
-
         $this->app->singleton('modules.loader', function () {
             $modules = config('app.modules', []);
+
             if (file_exists($path = base_path('bootstrap'.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'modules.php'))) {
                 $modules = array_merge($modules + include $path);
             }
@@ -86,6 +88,22 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
             'DatabaseConfig'    => DatabaseConfig::class,
             'Profiler'          => Profiler::class,
             'WYSIWYG'           => Wysiwyg::class,
+            'Form'              => \Collective\Html\FormFacade::class,
+            'HTML'              => \Collective\Html\HtmlFacade::class,
         ]);
+    }
+}
+
+
+if (! function_exists('acl_check')) {
+
+    /**
+     * @param string|array $action
+     *
+     * @return bool
+     */
+    function acl_check($action)
+    {
+        return true;
     }
 }

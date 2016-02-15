@@ -96,19 +96,6 @@ function array_keys_exists_recursive(array $arr1, array $arr2)
     return $outputDiff;
 }
 
-if (! function_exists('acl_check')) {
-
-    /**
-     * @param string|array $action
-     *
-     * @return bool
-     */
-    function acl_check($action)
-    {
-        return true;
-    }
-}
-
 /**
  * @param $string
  *

@@ -52,6 +52,10 @@ class ModuleServiceProvider extends ServiceProvider
             return "<?php event{$expression}; ?>";
         });
 
+        $this->publishes([
+            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'cms.php' => config_path('cms.php')
+        ], 'kodicms');
+
         $this->registerCacheDrivers();
     }
 

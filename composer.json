@@ -1,7 +1,7 @@
 {
     "name":        "kodicms/core",
     "type":        "kodicms-module",
-    "description": "The official KodiCMS Cron module",
+    "description": "The official KodiCMS Core module",
     "homepage":    "http://www.kodicms.ru/",
     "license":     "MIT",
     "keywords":    ["laravel", "framework", "kodicms", "cms", "module", "core"],
