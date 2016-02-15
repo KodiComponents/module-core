@@ -53,10 +53,6 @@ class ModuleServiceProvider extends ServiceProvider
         });
 
         $this->publishes([
-            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'cms.php' => config_path('cms.php')
-        ], 'kodicms');
-
-        $this->publishes([
              __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'cms' => public_path('cms')
          ], 'kodicms');
 
