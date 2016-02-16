@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\Store as SessionStore;
+use Illuminate\Validation\ValidationException;
 
 trait Controller
 {
@@ -136,11 +137,32 @@ trait Controller
      */
     public function callAction($method, $parameters)
     {
-        $this->before();
-        $response = call_user_func_array([$this, $method], $parameters);
-        $this->after($response);
+        try {
+            $this->before();
+            $response = call_user_func_array([$this, $method], $parameters);
+            $this->after($response);
+        } catch (ValidationException $e) {
+            $response = $this->buildFailedValidation(
+                $this->request, $e
+            );
+        }
 
         return $response;
+    }
+
+    /**
+     * @param Request                                    $request
+     * @param \Illuminate\Validation\ValidationException $e
+     *
+     * @return $this|JsonResponse
+     */
+    protected function buildFailedValidation(Request $request, \Illuminate\Validation\ValidationException $e)
+    {
+        $errors = $this->formatValidationErrors($e->validator);
+
+        return redirect()->to($this->getRedirectUrl())
+            ->withInput($request->input())
+            ->withErrors($errors, $this->errorBag());
     }
 
     /**

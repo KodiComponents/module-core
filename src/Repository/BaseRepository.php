@@ -186,7 +186,7 @@ class BaseRepository
         }
 
         if ($validator->fails()) {
-            throw (new ValidationException)->setValidator($validator);
+            throw new ValidationException($validator);
         }
 
         return true;

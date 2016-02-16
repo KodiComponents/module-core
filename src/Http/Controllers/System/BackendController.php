@@ -7,7 +7,6 @@ use View;
 use Meta;
 use KodiCMS\Navigation\Navigation;
 use KodiCMS\Support\Helpers\Callback;
-use KodiCMS\CMS\Exceptions\ValidationException;
 use KodiCMS\Support\Helpers\NavigationBreadcrumbs;
 use KodiCMS\CMS\Breadcrumbs\Collection as Breadcrumbs;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -113,10 +112,6 @@ class BackendController extends TemplateController
 
             $this->throwFailException(
                 $this->smartRedirect()->withErrors($message)
-            );
-        } catch (ValidationException $e) {
-            $this->throwValidationException(
-                $this->request, $e->getValidator()
             );
         }
     }
