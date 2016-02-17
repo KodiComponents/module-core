@@ -46,6 +46,10 @@ PackageManager::add('datepicker')
     ->js(null, resources_url('/libs/datetimepicker/js/jquery.datetimepicker.min.js'), ['jquery', 'libraries'])
     ->css(null, resources_url('/libs/datetimepicker/css/jquery.datetimepicker.css'));
 
+PackageManager::add('bootstrap-multiselect')
+    ->js(null, resources_url('/libs/bootstrap-multiselect/js/bootstrap-multiselect.js'), ['jquery', 'libraries'])
+    ->css(null, resources_url('/libs/bootstrap-multiselect/css/bootstrap-multiselect.css'));
+
 PackageManager::add('editable')
     ->js(null, resources_url('/libs/x-editable/js/bootstrap-editable.min.js'), ['jquery', 'bootstrap'])
     ->css(null, resources_url('/libs/x-editable/css/bootstrap-editable.css'));
@@ -78,12 +82,12 @@ PackageManager::add('moment')
 
 PackageManager::add('ckeditor')
     ->js('ckeditor-library', resources_url('/libs/ckeditor/ckeditor.js'), ['jquery', 'libraries'])
-    ->js(null, backend_resources_url('/js/ckeditor.js'), 'ckeditor-library')
-    ->js("ckeditor-{$locale}", resources_url("/libs/ckeditor/lang/{$locale}.js"), 'validate');
+    ->js(null, resources_url('/js/wysiwyg/ckeditor.js'), 'ckeditor-library')
+    ->js("ckeditor-{$locale}", resources_url("/libs/ckeditor/lang/{$locale}.js"), 'ckeditor-library');
 
 PackageManager::add('ace')
     ->js('ace-library', resources_url('/libs/ace/src-min/ace.js'), ['jquery', 'libraries'])
-    ->js(null, backend_resources_url('/js/ace.js'), 'ace-library');
+    ->js(null, resources_url('/js/wysiwyg/ace.js'), 'ace-library');
 
 PackageManager::add('diff')
     ->js(null, resources_url('/libs/jsdiff/js/diff.js'));
