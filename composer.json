@@ -1,47 +1,57 @@
 {
-    "name": "kodicms/core",
-    "type": "kodicms-module",
-    "description": "The official KodiCMS Core module",
-    "homepage": "http://www.kodicms.ru/",
-    "license": "MIT",
-    "keywords": ["laravel", "framework", "kodicms", "cms", "module", "core"],
-    "module": {
-        "name": "CMS",
-        "priority": "-99"
-    },
-    "authors": [
-        {
-            "name": "Pavel Buchnev",
-            "email": "butschster@gmail.com",
-            "homepage": "http://www.kodicms.ru/"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/KodiComponents/module-core/issues",
-        "forum": "http://www.kodicms.ru/forum",
-        "source": "https://github.com/KodiComponents/module-core"
-    },
-    "autoload": {
-        "files": [
-            "src/helpers.php"
-        ],
-        "psr-4": {
-            "KodiCMS\\Support\\": "support/",
-            "KodiCMS\\CMS\\": "src/"
-        }
-    },
-    "require": {
-        "laravel/framework": "5.2.*",
-        "laravelcollective/html": "5.*",
-        "filp/whoops": "~1.0",
-        "guzzlehttp/guzzle": "~5.0",
-        "erusev/parsedown": "1.*",
-        "doctrine/dbal": "~2.3",
-        "intervention/image": "^2.3",
-        "kodicms/module-loader": "3.*",
-        "kodicms/laravel-api": "^1.0",
-        "kodicms/laravel-assets": "0.*",
-        "kodicms/laravel-navigation": "2.*",
-        "kodicms/api": "0.*"
+  "name": "kodicms/core",
+  "type": "kodicms-module",
+  "description": "The official KodiCMS Core module",
+  "homepage": "http://www.kodicms.ru/",
+  "license": "MIT",
+  "keywords": ["laravel", "framework", "kodicms", "cms", "module", "core"],
+  "module": {
+    "name": "CMS",
+    "priority": "-99"
+  },
+  "authors": [
+    {
+      "name": "Pavel Buchnev",
+      "email": "butschster@gmail.com",
+      "homepage": "http://www.kodicms.ru/"
     }
+  ],
+  "support": {
+    "issues": "https://github.com/KodiComponents/module-core/issues",
+    "forum": "http://www.kodicms.ru/forum",
+    "source": "https://github.com/KodiComponents/module-core"
+  },
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "KodiCMS\\Support\\": "support/",
+      "KodiCMS\\CMS\\": "src/"
+    }
+  },
+  "require": {
+    "laravel/framework": "5.2.*",
+    "laravelcollective/html": "5.*",
+    "filp/whoops": "~1.0",
+    "guzzlehttp/guzzle": "~5.0",
+    "erusev/parsedown": "1.*",
+    "doctrine/dbal": "~2.3",
+    "intervention/image": "^2.3",
+    "kodicms/module-loader": "3.*",
+    "kodicms/laravel-api": "^1.0",
+    "kodicms/laravel-assets": "0.*",
+    "kodicms/laravel-navigation": "2.*",
+    "kodicms/api": "0.*"
+  },
+  "suggest": {
+    "kodicms/users": "Required for authorization",
+    "kodicms/dashboard": "Use for administration dashboard",
+    "kodicms/datasource": "Required if you want to create custom sections",
+    "kodicms/filemanager": "Required if you want to use file manager",
+    "kodicms/pages": "Frontend pages",
+    "kodicms/plugins": "Required if you want to use plugins",
+    "kodicms/userguide": "KodiCMS userguide section for admin",
+    "kodicms/widgets": "Use with kodicms/pages to content placement"
+  }
 }
