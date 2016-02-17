@@ -17,10 +17,11 @@ class ModulesLoader extends BaseModulesLoader
      * @param string|null $modulePath
      * @param string|null $namespace
      * @param string|null $moduleContainerClass
+     * @param array       $moduleInfo
      *
      * @return $this
      */
-    public function addModule($moduleName, $modulePath = null, $namespace = null, $moduleContainerClass = null)
+    public function addModule($moduleName, $modulePath = null, $namespace = null, $moduleContainerClass = null, array $moduleInfo = [])
     {
         $token = Profiler::start('Modules Loader', $moduleName);
 
@@ -28,7 +29,7 @@ class ModulesLoader extends BaseModulesLoader
             $namespace = 'KodiCMS\\'.$moduleName;
         }
 
-        parent::addModule($moduleName, $modulePath, $namespace, $moduleContainerClass);
+        parent::addModule($moduleName, $modulePath, $namespace, $moduleContainerClass, $moduleInfo);
         Profiler::stop($token);
 
         return $this;

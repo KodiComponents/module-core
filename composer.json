@@ -1,43 +1,47 @@
 {
-    "name":        "kodicms/core",
-    "type":        "kodicms-module",
+    "name": "kodicms/core",
+    "type": "kodicms-module",
     "description": "The official KodiCMS Core module",
-    "homepage":    "http://www.kodicms.ru/",
-    "license":     "MIT",
-    "keywords":    ["laravel", "framework", "kodicms", "cms", "module", "core"],
+    "homepage": "http://www.kodicms.ru/",
+    "license": "MIT",
+    "keywords": ["laravel", "framework", "kodicms", "cms", "module", "core"],
+    "module": {
+        "name": "CMS",
+        "priority": "-99"
+    },
     "authors": [
         {
-            "name":     "Pavel Buchnev",
-            "email":    "butschster@gmail.com",
+            "name": "Pavel Buchnev",
+            "email": "butschster@gmail.com",
             "homepage": "http://www.kodicms.ru/"
         }
     ],
     "support": {
-        "issues":   "https://github.com/KodiComponents/module-core/issues",
-        "forum":    "http://www.kodicms.ru/forum",
-        "source":   "https://github.com/KodiComponents/module-core"
+        "issues": "https://github.com/KodiComponents/module-core/issues",
+        "forum": "http://www.kodicms.ru/forum",
+        "source": "https://github.com/KodiComponents/module-core"
     },
     "autoload": {
         "files": [
             "src/helpers.php"
         ],
         "psr-4": {
-			"KodiCMS\\Support\\": "support/",
+            "KodiCMS\\Support\\": "support/",
             "KodiCMS\\CMS\\": "src/"
         }
     },
-	"require": {
-		"laravel/framework": "5.2.*",
-		"laravelcollective/html": "5.*",
-		"filp/whoops": "~1.0",
-		"guzzlehttp/guzzle": "~5.0",
-		"erusev/parsedown": "1.*",
-		"doctrine/dbal": "~2.3",
-		"intervention/image": "^2.3",
+    "require": {
+        "laravel/framework": "5.2.*",
+        "laravelcollective/html": "5.*",
+        "filp/whoops": "~1.0",
+        "guzzlehttp/guzzle": "~5.0",
+        "erusev/parsedown": "1.*",
+        "doctrine/dbal": "~2.3",
+        "intervention/image": "^2.3",
         "kodicms/module-loader": "3.*",
-		"kodicms/laravel-api": "^1.0",
-		"kodicms/laravel-assets": "0.*",
-		"kodicms/laravel-navigation": "2.*",
+        "kodicms/laravel-api": "^1.0",
+        "kodicms/laravel-assets": "0.*",
+        "kodicms/laravel-navigation": "2.*",
         "kodicms/api": "0.*"
     }
 }

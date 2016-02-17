@@ -5,6 +5,7 @@ namespace KodiCMS\CMS\Console\Commands;
 use Composer;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Console\Helper\TableSeparator;
 
 class ModuleInstallCommand extends Command
 {
@@ -24,6 +25,13 @@ class ModuleInstallCommand extends Command
     protected $files;
 
     /**
+     * The table headers for the command.
+     *
+     * @var array
+     */
+    protected $headers = ['Namespace', 'Info'];
+
+    /**
      * Execute the console command.
      *
      * @param Filesystem $files
@@ -35,44 +43,36 @@ class ModuleInstallCommand extends Command
         $this->files = $files;
 
         $moduleInfo = [];
+        $tableData = [];
 
         foreach ($this->files->directories(base_path('vendor')) as $packageDir) {
             foreach ($this->files->directories($packageDir) as $dir) {
-				if( !file_exists($composerFile = $dir.DIRECTORY_SEPARATOR.'composer.json')) {
-					continue;
-				}
-				
-                $composerJson = json_decode($this->files->get($composerFile), true);
+                if (! is_null($data = $this->parseComposerFile($dir))) {
+                    $moduleInfo = $moduleInfo + $data;
 
-                if (
-                    ! isset($composerJson['type'])
-                    or
-                    $composerJson['type'] != 'kodicms-module'
-                    or
-                    ! isset($composerJson['autoload']['psr-4'])
-                    or
-                    $composerJson['name'] == 'kodicms/core'
-                ) {
-                    continue;
-                }
+                    foreach ($data as $moduleName => $info) {
+                        $tableData[] = [
+                            $moduleName,
+                            json_encode($info, JSON_PRETTY_PRINT)
+                        ];
+                    }
 
-                foreach ($composerJson['autoload']['psr-4'] as $namespace => $path) {
-                    $pathInfo = pathinfo($dir);
-                    $moduleInfo[$pathInfo['basename']] = [
-                        'namespace' => $namespace,
-                        'path'      => $dir.DIRECTORY_SEPARATOR.normalize_path($path)
-                    ];
-
-                    $this->info('Include module ['.json_encode($moduleInfo[$pathInfo['basename']]).']');
+                    $tableData[] = new TableSeparator();
                 }
             }
         }
 
+        uasort($moduleInfo, function($a, $b) {
+            if ($a['priority'] == $b['priority']) {
+                return 0;
+            }
+            return ($a['priority'] < $b['priority']) ? -1 : 1;
+        });
 
+        $this->info('Installed modules');
+        $this->table($this->headers, $tableData);
 
         $modulesCachePath = $this->getPath();
-        $this->makeDirectory($path);
-
         $stub = $this->files->get($this->getStub());
 
         $this->files->put($modulesCachePath, str_replace('{{modules}}', var_export($moduleInfo, true), $stub));
@@ -80,6 +80,52 @@ class ModuleInstallCommand extends Command
         $this->call('vendor:publish', [
             '--tag' => ['kodicms']
         ]);
+    }
+
+    /**
+     * @param string $dir
+     *
+     * @return array|void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function parseComposerFile($dir)
+    {
+        if( !file_exists($path = $dir.DIRECTORY_SEPARATOR.'composer.json')) {
+            return;
+        }
+
+        $json = json_decode($this->files->get($path), true);
+
+        if (
+            ! isset($json['type'])
+            or
+            $json['type'] != 'kodicms-module'
+            or
+            ! isset($json['autoload']['psr-4'])
+        ) {
+            return;
+        }
+
+        $data = [];
+
+        foreach ($json['autoload']['psr-4'] as $namespace => $path) {
+            $pathInfo = pathinfo($dir);
+            $moduleName = array_get($json, 'module.name', $pathInfo['basename']);
+
+            $data[$moduleName] = [
+                'namespace'   => $namespace,
+                'path'        => $dir.DIRECTORY_SEPARATOR.normalize_path($path),
+                'priority'    => (int)array_get($json, 'module.priority'),
+                'authors'     => array_get($json, 'authors', []),
+                'package'     => array_get($json, 'name', []),
+                'description' => array_get($json, 'description', []),
+                'homepage'    => array_get($json, 'homepage', []),
+                'support'     => array_get($json, 'support', []),
+                'require'     => array_get($json, 'require', [])
+            ];
+        }
+
+        return $data;
     }
 
     /**
