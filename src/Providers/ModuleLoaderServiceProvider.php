@@ -3,8 +3,9 @@
 namespace KodiCMS\CMS\Providers;
 
 use KodiCMS\CMS\CMS;
+use Collective\Html\FormFacade;
+use Collective\Html\HtmlFacade;
 use KodiCMS\Support\Facades\Wysiwyg;
-use KodiCMS\Support\Facades\RouteAPI;
 use KodiCMS\Support\Helpers\Profiler;
 use Illuminate\Foundation\AliasLoader;
 use KodiCMS\Support\Facades\KeysHelper;
@@ -93,14 +94,12 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
         AliasLoader::getInstance([
             'ModulesLoader'     => ModulesLoaderFacade::class,
             'ModulesFileSystem' => ModulesFileSystemFacade::class,
-            'Keys'              => KeysHelper::class,
-            'RouteAPI'          => RouteAPI::class,
             'CMS'               => CMS::class,
             'DatabaseConfig'    => DatabaseConfig::class,
             'Profiler'          => Profiler::class,
             'WYSIWYG'           => Wysiwyg::class,
-            'Form'              => \Collective\Html\FormFacade::class,
-            'HTML'              => \Collective\Html\HtmlFacade::class,
+            'Form'              => FormFacade::class,
+            'HTML'              => HtmlFacade::class,
         ]);
     }
 }
