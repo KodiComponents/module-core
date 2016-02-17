@@ -43,6 +43,62 @@
 		</tbody>
 	</table>
 
+	<div class="panel-heading">
+		<span class="panel-title">@lang('cms::system.tab.about.modules')</span>
+	</div>
+	<div class="panel-body">
+		@foreach($modules as $module)
+		<div class="panel">
+			@if($module->getInfo())
+			<div class="panel-heading">
+				<h4>
+					{{ array_get($module->getInfo(), 'package') }}  {{ array_get($module->getInfo(), 'version') }}
+					<small>{{ $module->getName() }}</small>
+				</h4>
+			</div>
+			<div class="panel-body">
+				@if($description = array_get($module->getInfo(), 'description'))
+					<p class="text-muted">{{ $description }}</p>
+				@endif
+
+				@if($authors = array_get($module->getInfo(), 'authors'))
+					<hr />
+					<h5>@lang('cms::system.module.authors')</h5>
+					<ul>
+						@foreach($authors as $author)
+							<li>
+								{{ array_get($author, 'name') }}
+
+								@if($email = array_get($author, 'email'))
+									{!! HTML::mailto($email) !!}
+								@endif
+							</li>
+						@endforeach
+					</ul>
+				@endif
+
+				@if($support = array_get($module->getInfo(), 'support'))
+					<hr />
+					<h5>@lang('cms::system.module.support')</h5>
+					<ul>
+						@foreach($support as $type => $link)
+							<li>{!! link_to($link, $type, ['target' => '_blank']) !!}</li>
+						@endforeach
+					</ul>
+				@endif
+			</div>
+			@else
+			<div class="panel-heading">
+				<h4>{{ $module->getName() }}</h4>
+			</div>
+			@endif
+			<div class="panel-footer">
+				<code>{{ $module->getNamespace() }} [{{ $module->getPath() }}]</code>
+			</div>
+		</div>
+		@endforeach
+	</div>
+
 	@if (acl_check('system.phpinfo') and function_exists('phpinfo'))
 	<div class="panel-heading">
 		<span class="panel-title">@lang('cms::system.tab.about.php_info')</span>

@@ -5,6 +5,7 @@ namespace KodiCMS\CMS\Http\Controllers;
 use Date;
 use Meta;
 use WYSIWYG;
+use ModulesLoader;
 use KodiCMS\CMS\Helpers\Updater;
 use KodiCMS\Support\Helpers\Locale;
 
@@ -22,13 +23,14 @@ class SystemController extends System\BackendController
 
     public function about()
     {
-        $this->setContent('system.about');
+        $this->setContent('system.about', [
+            'modules' => ModulesLoader::getRegisteredModules()
+        ]);
     }
 
     public function phpInfo()
     {
         $this->autoRender = false;
-
         phpinfo();
     }
 

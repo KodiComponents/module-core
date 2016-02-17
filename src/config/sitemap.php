@@ -35,14 +35,6 @@ return [
                 'priority'    => 100,
                 'icon'        => 'cog',
             ],
-            [
-                'name'        => 'Update',
-                'label'       => 'cms::core.title.update',
-                'url'         => route('backend.update'),
-                'permissions' => 'backend.update',
-                'priority'    => 500,
-                'icon'        => 'cloud-download',
-            ],
         ],
     ],
 ];

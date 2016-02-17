@@ -5,6 +5,7 @@ return [
         'about'    => [
             'general'  => 'Основная информация',
             'php_info' => 'Информация PHP',
+            'modules'  => 'Модули'
         ],
         'settings' => [
             'site_information' => 'Основные',
@@ -51,4 +52,8 @@ return [
             'saved' => 'Настройки сохранены',
         ],
     ],
+    'module' => [
+        'authors' => 'Разработчики',
+        'support' => 'Поддержка'
+    ]
 ];

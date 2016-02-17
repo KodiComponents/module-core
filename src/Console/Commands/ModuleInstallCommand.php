@@ -32,6 +32,11 @@ class ModuleInstallCommand extends Command
     protected $headers = ['Namespace', 'Info'];
 
     /**
+     * @var array
+     */
+    protected $installedPackages = [];
+
+    /**
      * Execute the console command.
      *
      * @param Filesystem $files
@@ -44,6 +49,10 @@ class ModuleInstallCommand extends Command
 
         $moduleInfo = [];
         $tableData = [];
+
+        if (file_exists($composerFile = base_path('vendor'.DIRECTORY_SEPARATOR.'composer'.DIRECTORY_SEPARATOR.'installed.json'))) {
+            $this->installedPackages = json_decode($this->files->get($composerFile), true);
+        }
 
         foreach ($this->files->directories(base_path('vendor')) as $packageDir) {
             foreach ($this->files->directories($packageDir) as $dir) {
@@ -106,6 +115,13 @@ class ModuleInstallCommand extends Command
             return;
         }
 
+        foreach ($this->installedPackages as $package) {
+            if (array_get($package, 'name') == array_get($json, 'name')) {
+                $json['version'] = array_get($package, 'version');
+                $json['source'] = array_get($package, 'source');
+            }
+        }
+
         $data = [];
 
         foreach ($json['autoload']['psr-4'] as $namespace => $path) {
@@ -117,11 +133,13 @@ class ModuleInstallCommand extends Command
                 'path'        => $dir.DIRECTORY_SEPARATOR.normalize_path($path),
                 'priority'    => (int)array_get($json, 'module.priority'),
                 'authors'     => array_get($json, 'authors', []),
-                'package'     => array_get($json, 'name', []),
-                'description' => array_get($json, 'description', []),
-                'homepage'    => array_get($json, 'homepage', []),
+                'package'     => array_get($json, 'name'),
+                'description' => array_get($json, 'description'),
+                'homepage'    => array_get($json, 'homepage'),
                 'support'     => array_get($json, 'support', []),
-                'require'     => array_get($json, 'require', [])
+                'require'     => array_get($json, 'require', []),
+                'version'     => array_get($json, 'version', []),
+                'source'      => array_get($json, 'source', [])
             ];
         }
 
