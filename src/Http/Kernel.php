@@ -11,16 +11,22 @@ class Kernel extends HttpKernel
     /**
      * Create a new HTTP kernel instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Routing\Router  $router
+     * @param  \Illuminate\Contracts\Foundation\Application $app
+     * @param  \Illuminate\Routing\Router                   $router
+     *
      * @return void
      */
     public function __construct(Application $app, Router $router)
     {
         $this->middleware[] = \KodiCMS\CMS\Http\Middleware\PostJson::class;
 
-        $this->routeMiddleware['backend.auth'] = \App\Http\Middleware\Authenticate::class;
-        $this->routeMiddleware['backend.guest'] = \App\Http\Middleware\RedirectIfAuthenticated::class;
+        if (! isset($this->routeMiddleware['backend.auth'])) {
+            $this->routeMiddleware['backend.auth'] = \App\Http\Middleware\Authenticate::class;
+        }
+
+        if (! isset($this->routeMiddleware['backend.guest'])) {
+            $this->routeMiddleware['backend.guest'] = \App\Http\Middleware\RedirectIfAuthenticated::class;
+        }
 
         parent::__construct($app, $router);
     }
