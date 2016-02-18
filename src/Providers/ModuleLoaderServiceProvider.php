@@ -103,17 +103,3 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
         ]);
     }
 }
-
-
-if (! function_exists('acl_check')) {
-
-    /**
-     * @param string|array $action
-     *
-     * @return bool
-     */
-    function acl_check($action)
-    {
-        return true;
-    }
-}
