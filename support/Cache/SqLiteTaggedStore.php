@@ -5,10 +5,13 @@ namespace KodiCMS\Support\Cache;
 use Closure;
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Contracts\Cache\Store;
+use Illuminate\Cache\RetrievesMultipleKeys;
 use Illuminate\Database\ConnectionInterface;
 
 class SqLiteTaggedStore extends TaggableStore implements Store
 {
+    use RetrievesMultipleKeys;
+
     /**
      * The database connection instance.
      *
