@@ -19,7 +19,7 @@ CMS.ui.add('app', function () {
 			});
 		});
 
-		Api.post('/api.page.widgets.reorder', {data: data, id: pageId}, $.proxy(callback, this));
+		Api.post('/api.page.widgets.reorder', {data: data, id: PAGE.id}, $.proxy(callback, this));
 	};
 
 	$('.page-block-placeholder .sortable').sortable({
