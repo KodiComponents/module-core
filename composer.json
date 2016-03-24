@@ -41,7 +41,7 @@
     "kodicms/module-loader": "3.*",
     "kodicms/laravel-api": "^1.0",
     "kodicms/laravel-assets": "0.*",
-    "kodicms/laravel-navigation": "2.*",
+    "kodicomponents/navigation": "0.*",
     "kodicms/api": "0.*"
   },
   "suggest": {
