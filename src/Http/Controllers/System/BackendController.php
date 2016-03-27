@@ -30,7 +30,7 @@ class BackendController extends TemplateController
 
     public function boot()
     {
-        $this->navigation = Navigation::make(config('sitemap', []));
+        $this->navigation = app('navigation');
         $this->breadcrumbs = new Breadcrumbs;
     }
 
@@ -42,15 +42,7 @@ class BackendController extends TemplateController
 
     public function before()
     {
-        $currentPage = $this->navigation->getCurrentPage();
-
         $this->breadcrumbs->add(UI::icon('home'), route('backend.dashboard'));
-
-        if (! is_null($currentPage)) {
-            new NavigationBreadcrumbs($this->breadcrumbs, $currentPage);
-        }
-
-        View::share('currentPage', $currentPage);
 
         parent::before();
     }

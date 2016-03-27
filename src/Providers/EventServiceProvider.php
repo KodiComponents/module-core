@@ -41,7 +41,7 @@ class EventServiceProvider extends BaseEventServiceProvider
         });
 
         $events->listen('view.menu', function ($navigation) {
-            echo view('cms::navigation.list')->with('navigation', $navigation)->render();
+            echo $navigation;
         });
 
         $events->listen('config.loaded', function () {
@@ -56,6 +56,8 @@ class EventServiceProvider extends BaseEventServiceProvider
                     }
                 } catch (PDOException $e) {
                 }
+
+                $this->app['navigation']->setFromArray(config('sitemap'));
             }
         }, 999);
 

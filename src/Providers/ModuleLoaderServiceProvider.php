@@ -5,6 +5,8 @@ namespace KodiCMS\CMS\Providers;
 use KodiCMS\CMS\CMS;
 use Collective\Html\FormFacade;
 use Collective\Html\HtmlFacade;
+use KodiCMS\CMS\Navigation\Navigation;
+use KodiCMS\CMS\Navigation\Page;
 use KodiCMS\Support\Facades\Wysiwyg;
 use KodiCMS\Support\Helpers\Profiler;
 use Illuminate\Foundation\AliasLoader;
@@ -75,6 +77,12 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
             }
 
             return new ModulesLoader($modules);
+        });
+
+        $this->app->bind(\KodiComponents\Navigation\Contracts\PageInterface::class, Page::class);
+
+        $this->app->singleton('navigation', function () {
+            return new Navigation();
         });
 
         $this->app->singleton('modules.filesystem', function ($app) {
