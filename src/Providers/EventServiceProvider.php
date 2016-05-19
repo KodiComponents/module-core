@@ -3,12 +3,14 @@
 namespace KodiCMS\CMS\Providers;
 
 use Config;
+use KodiCMS\CMS\Events\BackendSettingsSave;
+use KodiCMS\CMS\Events\BackendSettingsValidate;
 use WYSIWYG;
 use Profiler;
 use PDOException;
 use KodiCMS\CMS\Helpers\DatabaseConfig;
-use KodiCMS\CMS\Handlers\Events\SettingsSave;
-use KodiCMS\CMS\Handlers\Events\SettingsValidate;
+use KodiCMS\CMS\Listeners\BackendSettingsSaveListener;
+use KodiCMS\CMS\Listeners\BackendSettingsValidateListener;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as BaseEventServiceProvider;
 
@@ -20,8 +22,12 @@ class EventServiceProvider extends BaseEventServiceProvider
      * @var array
      */
     protected $listen = [
-        'backend.settings.validate' => [SettingsValidate::class],
-        'backend.settings.save'     => [SettingsSave::class],
+        BackendSettingsValidate::class => [
+            BackendSettingsValidateListener::class
+        ],
+        BackendSettingsSave::class     => [
+            BackendSettingsSaveListener::class
+        ],
     ];
 
     /**
