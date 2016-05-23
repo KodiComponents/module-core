@@ -65,11 +65,11 @@ class EventServiceProvider extends BaseEventServiceProvider
             }
         }, 999);
 
-        $events->listen('illuminate.query', function ($sql, $bindings, $time) {
-            $sql = str_replace(['%', '?'], ['%%', '%s'], $sql);
-            $sql = vsprintf($sql, $bindings);
+        \DB::listen(function ($query) {
+            $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
+            $sql = vsprintf($sql, $query->bindings);
 
-            Profiler::append('Database', $sql, $time / 1000);
+            Profiler::append('Database '.$query->connectionName, $sql, $query->time / 1000);
         });
     }
 }
