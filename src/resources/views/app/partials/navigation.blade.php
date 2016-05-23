@@ -1,5 +1,5 @@
 @if($navigation)
 <div id="main-menu-inner">
-	@event('view.menu', [$navigation])
+	{!! $navigation !!}
 </div>
 @endif

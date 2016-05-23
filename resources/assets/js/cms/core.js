@@ -3,7 +3,7 @@
 
 		/*
 		 * Determines whether a string ends with the specified suffix.
-		 * 
+		 *
 		 * @param  {String} suffix
 		 * @return Boolean
 		 */
@@ -16,7 +16,7 @@
 
 		/*
 		 * Removes whitespace from both sides of a string.
-		 * 
+		 *
 		 * @return {String}
 		 */
 		String.prototype.trim = function() {
@@ -28,7 +28,7 @@
 
 		/*
 		 * The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present.
-		 * 
+		 *
 		 * @param  {Variant} searchElement
 		 * @param  {Integer} fromIndex
 		 * @return {Integer}
@@ -114,7 +114,7 @@
 
 	/*
 	 * Detect screen size.
-	 * 
+	 *
 	 * @param  {jQuery Object} $ssw_point
 	 * @param  {jQuery Object} $tsw_point
 	 * @return {String}
@@ -166,7 +166,7 @@
 
 	/*
 	 * Start application. Method takes an array of initializers and a settings object(that overrides default settings).
-	 * 
+	 *
 	 * @param  {Array} suffix
 	 * @param  {Object} settings
 	 * @return this
@@ -206,7 +206,7 @@
 
 	/*
 	 * Add initializer to the stack.
-	 * 
+	 *
 	 * @param  {Function} callback
 	 */
 
@@ -217,7 +217,7 @@
 
 	/*
 	 * Initialize plugin and add it to the plugins list.
-	 * 
+	 *
 	 * @param  {String} plugin_name
 	 * @param  {Instance} plugin
 	 */
@@ -225,7 +225,7 @@
 		if (settings != null) {
 			this.settings = $.extend(true, {}, this.settings, settings || {});
 		}
-		
+
 		this.plugins[plugin_name] = plugin;
 		if (plugin.init) {
 			return plugin.init();
@@ -235,14 +235,14 @@
 
 	/*
 	 * Save value in the localStorage/Cookies.
-	 * 
+	 *
 	 * @param  {String}  key
 	 * @param  {String}  value
 	 * @param  {Boolean} use_cookies
 	 */
 	KodiCMSApp.prototype.storeValue = function(key, value, use_cookies) {
 		var e;
-		
+
 		if (use_cookies == null) {
 			use_cookies = false;
 		}
@@ -260,12 +260,12 @@
 
 	/*
 	 * Get value from the localStorage/Cookies.
-	 * 
+	 *
 	 * @param  {String} key
 	 * @param  {Boolean} use_cookies
 	 */
 	KodiCMSApp.prototype.getStoredValue = function(key, use_cookies, deflt) {
-		
+
 		var cookie, cookies, e, k, pos, r, v, _i, _len;
 		if (use_cookies == null) {
 			use_cookies = false;
@@ -521,7 +521,7 @@
 		this._close_timer = null;
 		this._dropdown_li = null;
 		this._dropdown = null;
-		
+
 		return this;
 	};
 
@@ -552,7 +552,7 @@
 				};
 			})(this), 20);
 		}
-		
+
 		$('.navigation > li:has(ul)', this.$menu).each(function() {
 			if($('> ul > li', this).size() < 1)
 				$(this).remove();
@@ -916,7 +916,7 @@
 				store_state_key: 'mmstate',
 				disable_animation_on: ['small'],
 				dropdown_close_delay: 300,
-				detect_active: true,
+				detect_active: false,
 				detect_active_predicate: function(href, url) {
 					if(href == url)
 						return true;
@@ -1553,7 +1553,7 @@
 			return false;
 		});
 	};
-	
+
 	jQuery.browser = {};
 	jQuery.browser.mozilla = /mozilla/.test(navigator.userAgent.toLowerCase()) && !/webkit/.test(navigator.userAgent.toLowerCase());
 	jQuery.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());

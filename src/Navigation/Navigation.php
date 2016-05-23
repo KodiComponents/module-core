@@ -12,36 +12,16 @@ class Navigation extends \KodiComponents\Navigation\Navigation
      */
     public function render()
     {
-        $this->findActive();
-        $this->filterByAccessRights();
-        $this->sort();
+        $this->filterEmptyPages();
 
-        return view('cms::navigation.navigation', [
-            'pages' => $this->toArray(),
-        ])->render();
+        return parent::render('cms::navigation.navigation');
     }
 
-    /**
-     * @param array $data
-     *
-     * @return PageInterface
-     */
-    protected function createPageFromArray(array $data)
+    protected function filterEmptyPages()
     {
-        $page = app(PageInterface::class);
-
-        foreach ($data as $key => $value) {
-            if ($key != 'children' and method_exists($page, $method = 'set'.ucfirst($key))) {
-                $page->{$method}($value);
-            }
-        }
-
-        if (isset($data['children']) and is_array($data['children'])) {
-            foreach ($data['children'] as $child) {
-                $page->addPage($child);
-            }
-        }
-
-        return $page;
+        $this->items = $this->getPages()->filter(function(PageInterface $page) {
+            $page->filterEmptyPages();
+            return !(is_null($page->getUrl()) and ! $page->hasChild());
+        });
     }
 }

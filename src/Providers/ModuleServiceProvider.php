@@ -5,6 +5,7 @@ namespace KodiCMS\CMS\Providers;
 use Blade;
 use Cache;
 use KodiCMS\CMS\CMS;
+use Navigation;
 use KodiCMS\Support\Helpers\UI;
 use KodiCMS\Assets\Facades\Meta;
 use KodiCMS\Support\Helpers\Date;
@@ -60,9 +61,11 @@ class ModuleServiceProvider extends ServiceProvider
             WysiwygListCommand::class,
             ModuleInstallCommand::class
         ]);
-        
-        Permission::register('core', 'system', [
-            'view_phpinfo'
+
+        Permission::register('cms', 'system', [
+            'view_phpinfo',
+            'view_about',
+            'view_settings'
         ]);
 
         $this->app->singleton('cms', CMS::class);
@@ -79,6 +82,7 @@ class ModuleServiceProvider extends ServiceProvider
          ], 'kodicms');
 
         $this->registerCacheDrivers();
+        $this->registerNavigation();
     }
 
     protected function registerCacheDrivers()
@@ -101,5 +105,41 @@ class ModuleServiceProvider extends ServiceProvider
 
             return Cache::repository(new DatabaseTaggedStore($connection, $config['table']));
         });
+    }
+
+    protected function registerNavigation()
+    {
+        Navigation::setFromArray([
+            [
+                'title' => 'cms::core.title.design',
+                'id' => 'design',
+                'icon' => 'desktop',
+                'priority' => 7000,
+            ],
+            [
+                'title' => 'cms::core.title.system',
+                'id' => 'system',
+                'icon' => 'cog',
+                'priority' => 8000,
+                'pages' => [
+                    [
+                        'title' => 'cms::core.title.about',
+                        'id' => 'information',
+                        'icon' => 'info-circle',
+                        'permissions' => 'system.view_about',
+                        'url' => route('backend.about'),
+                        'priority' => 90,
+                    ],
+                    [
+                        'title' => 'cms::core.title.settings',
+                        'id' => 'settings',
+                        'url' => route('backend.settings'),
+                        'permissions' => 'system.view_settings',
+                        'priority' => 100,
+                        'icon' => 'cog',
+                    ],
+                ],
+            ],
+        ]);
     }
 }

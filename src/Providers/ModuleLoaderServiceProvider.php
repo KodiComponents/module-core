@@ -10,7 +10,6 @@ use KodiCMS\Support\Facades\Wysiwyg;
 use KodiCMS\Support\Helpers\Profiler;
 use Illuminate\Foundation\AliasLoader;
 use KodiCMS\CMS\Navigation\Navigation;
-use KodiCMS\Support\Facades\KeysHelper;
 use KodiCMS\Assets\AssetsServiceProvider;
 use KodiCMS\Support\Loader\ModulesLoader;
 use KodiCMS\Support\Facades\DatabaseConfig;
@@ -108,6 +107,7 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
             'WYSIWYG'           => Wysiwyg::class,
             'Form'              => FormFacade::class,
             'HTML'              => HtmlFacade::class,
+            'Navigation'        => \KodiCMS\Support\Facades\Navigation::class
         ]);
     }
 }

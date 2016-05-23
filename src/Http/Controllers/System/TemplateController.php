@@ -63,9 +63,6 @@ class TemplateController extends Controller
         View::share('controllerAction', $this->getCurrentAction());
         View::share('currentUser', $this->currentUser);
         View::share('requestType', $this->requestType);
-
-        // Todo: подумать нужно ли передавать во view название модуля
-        //View::share('currentModule', substr($this->getModuleNamespace(), 0, -2));
     }
 
     public function after()

@@ -46,10 +46,6 @@ class EventServiceProvider extends BaseEventServiceProvider
             echo view('cms::ace.settings')->with('availableACEThemes', config('cms.wysiwyg.ace_themes'));
         });
 
-        $events->listen('view.menu', function ($navigation) {
-            echo $navigation;
-        });
-
         $events->listen('config.loaded', function () {
             if (cms_installed()) {
                 try {
@@ -60,10 +56,7 @@ class EventServiceProvider extends BaseEventServiceProvider
                     foreach ($config as $group => $data) {
                         Config::set($group, array_merge(Config::get($group, []), $data));
                     }
-                } catch (PDOException $e) {
-                }
-
-                $this->app['navigation']->setFromArray(config('sitemap'));
+                } catch (PDOException $e) {}
             }
         }, 999);
 

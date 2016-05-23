@@ -1,12 +1,11 @@
 @if($hasChild)
     <li {!! $attributes !!}>
-        <a href="#" >
+        <a href="#">
             {!! $icon !!}
-            <span>{!! $title !!}</span>
-            <i class="fa fa-angle-left pull-right"></i>
+            <span class="mm-text">{!! $title !!}</span>
         </a>
 
-        <ul class="treeview-menu">
+        <ul>
             @foreach($pages as $page)
                 {!! $page->render() !!}
             @endforeach
@@ -16,7 +15,7 @@
     <li {!! $attributes !!}>
         <a href="{{ $url }}">
             {!! $icon !!}
-            <span>{!! $title !!}</span>
+            <span class="mm-text">{!! $title !!}</span>
             {!! $badge !!}
         </a>
     </li>

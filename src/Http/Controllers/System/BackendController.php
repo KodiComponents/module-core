@@ -3,11 +3,9 @@
 namespace KodiCMS\CMS\Http\Controllers\System;
 
 use UI;
-use View;
 use Meta;
 use KodiCMS\Navigation\Navigation;
 use KodiCMS\Support\Helpers\Callback;
-use KodiCMS\Support\Helpers\NavigationBreadcrumbs;
 use KodiCMS\CMS\Breadcrumbs\Collection as Breadcrumbs;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -33,12 +31,19 @@ class BackendController extends TemplateController
     {
         $this->breadcrumbs->add(UI::icon('home'), route('backend.dashboard'));
 
+        if ($currentPage = $this->navigation->getCurrentPage()) {
+            foreach ($currentPage->getPathArray() as $page) {
+                $this->breadcrumbs->add($page['title'], $page['url']);
+            }
+        }
+        
         parent::before();
     }
 
     public function after()
     {
-        $this->template->with('breadcrumbs', $this->breadcrumbs)
+        $this->template
+            ->with('breadcrumbs', $this->breadcrumbs)
             ->with('navigation', $this->navigation)
             ->with('bodyId', $this->getRouterPath());
 

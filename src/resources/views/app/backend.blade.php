@@ -24,13 +24,13 @@
 				@include('cms::app.partials.navbar')
 			</header>
 			<div id="main-menu" role="navigation">
-				@include('cms::app.partials.navigation', ['breadcrumbs' => $breadcrumbs])
+				@include('cms::app.partials.navigation')
 			</div>
 			<div id="main-menu-bg"></div>
 			@endif
 			<div id="content-wrapper">
 				@if($requestType != 'iframe')
-				@include('cms::app.partials.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+				@include('cms::app.partials.breadcrumbs')
 				@endif
 
 				<section id="content" >
