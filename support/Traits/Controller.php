@@ -41,8 +41,6 @@ trait Controller
     {
         app()->call([$this, 'initController']);
 
-        $this->initControllerAcl();
-
         // Execute method boot() on controller execute
         if (method_exists($this, 'boot')) {
             app()->call([$this, 'boot']);

@@ -99,7 +99,7 @@
 		@endforeach
 	</div>
 
-	@if (acl_check('system.phpinfo') and function_exists('phpinfo'))
+	@if (function_exists('phpinfo') and Gate::allows('system.view_phpinfo'))
 	<div class="panel-heading">
 		<span class="panel-title">@lang('cms::system.tab.about.php_info')</span>
 	</div>

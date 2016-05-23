@@ -20,6 +20,7 @@ use KodiCMS\CMS\Console\Commands\ControllerMakeCommand;
 use KodiCMS\CMS\Console\Commands\ModuleLocaleDiffCommand;
 use KodiCMS\CMS\Console\Commands\ModuleLocalePublishCommand;
 use KodiCMS\CMS\Console\Commands\GenerateScriptTranslatesCommand;
+use KodiCMS\Users\Model\Permission;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -41,6 +42,10 @@ class ModuleServiceProvider extends ServiceProvider
             ModulePublishCommand::class,
             WysiwygListCommand::class,
             ModuleInstallCommand::class
+        ]);
+        
+        Permission::register('core', 'system', [
+            'view_phpinfo'
         ]);
 
         $this->app->singleton('cms', CMS::class);

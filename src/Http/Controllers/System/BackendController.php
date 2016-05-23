@@ -14,11 +14,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class BackendController extends TemplateController
 {
     /**
-     * @var bool
-     */
-    public $authRequired = true;
-
-    /**
      * @var Navigation
      */
     public $navigation;
@@ -32,12 +27,6 @@ class BackendController extends TemplateController
     {
         $this->navigation = Navigation::make(config('sitemap', []));
         $this->breadcrumbs = new Breadcrumbs;
-    }
-
-    public function initControllerAcl()
-    {
-        parent::initControllerAcl();
-        $this->acl->addPermission($this->getCurrentAction(), $this->getRouter()->currentRouteName());
     }
 
     public function before()
