@@ -2,8 +2,10 @@
 
 namespace KodiCMS\CMS\Exceptions;
 
+use Exception;
 use Illuminate\Http\Response;
 use KodiCMS\API\Http\Response as APIResponse;
+use KodiCMS\CMS\Exceptions\ValidationException;
 use KodiCMS\CMS\Http\Controllers\ErrorController;
 use Illuminate\Auth\Access\AuthorizationException;
 use KodiCMS\API\Exceptions\Exception as APIException;
@@ -20,6 +22,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+        HttpException::class,
         AuthorizationException::class,
         HttpException::class,
         ModelNotFoundException::class,
@@ -35,7 +38,7 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function report(\Exception $e)
+    public function report(Exception $e)
     {
         return parent::report($e);
     }
@@ -44,11 +47,11 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Exception               $e
+     * @param  Exception                $e
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, \Exception $e)
+    public function render($request, Exception $e)
     {
         if ($request->ajax() or ($e instanceof APIException)) {
             return $this->renderApiException($e);
@@ -58,7 +61,7 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
 
-        if (config('app.debug') or ! cms_installed()) {
+        if ((config('app.debug')and ! app()->runningInConsole()) or ! cms_installed()) {
             return $this->renderExceptionWithWhoops($e);
         } elseif (! $this->isHttpException($e)) {
             return $this->renderException($e);
@@ -94,7 +97,7 @@ class Handler extends ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderException(\Exception $e)
+    protected function renderException(Exception $e)
     {
         return $this->renderControllerException($e, 500);
     }
@@ -102,12 +105,12 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception using ErrorController.
      *
-     * @param  \Exception $e
+     * @param  Exception $e
      * @param  int        $code
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderControllerException(\Exception $e, $code = 500)
+    protected function renderControllerException(Exception $e, $code = 500)
     {
         try {
             $controller = app()->make(ErrorController::class);
@@ -125,8 +128,8 @@ class Handler extends ExceptionHandler
             }
 
             return $this->toIlluminateResponse($response);
-        } catch (\Exception $ex) {
-            return $this->convertExceptionToResponse($ex);
+        } catch (Exception $ex) {
+            return $this->toIlluminateResponse($this->convertExceptionToResponse($ex), $ex);
         }
     }
 
@@ -137,15 +140,11 @@ class Handler extends ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderExceptionWithWhoops(\Exception $e)
+    protected function renderExceptionWithWhoops(Exception $e)
     {
         $whoops = new \Whoops\Run;
-        $whoops->pushHandler(
-            new \Whoops\Handler\PrettyPageHandler
-        );
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 
-        return $this->toIlluminateResponse(
-            new Response($whoops->handleException($e)), $e
-        );
+        return $this->toIlluminateResponse($whoops->handleException($e), $e);
     }
 }

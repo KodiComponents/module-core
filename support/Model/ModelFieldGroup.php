@@ -2,12 +2,12 @@
 
 namespace KodiCMS\Support\Model;
 
-use Form;
 use KodiCMS\Support\Traits\Settings;
+use KodiCMS\CMS\Contracts\SettingsInterface;
 use KodiCMS\Support\Traits\HtmlAttributes;
 use KodiCMS\Support\Model\Contracts\ModelFieldInterface;
 
-class ModelFieldGroup
+class ModelFieldGroup implements SettingsInterface
 {
     use Settings, HtmlAttributes;
 

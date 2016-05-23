@@ -19,7 +19,7 @@ class PostJson
     {
         if (0 === strpos($request->headers->get('CONTENT_TYPE'), 'application/json') and Request::isMethod('post')) {
             $request->request = new ParameterBag(
-                json_decode($request->getContent(), true)
+                (array) json_decode($request->getContent(), true)
             );
         }
 

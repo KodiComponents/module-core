@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Session\Store as SessionStore;
-use Illuminate\Validation\ValidationException;
 
 trait Controller
 {
@@ -40,8 +39,6 @@ trait Controller
     public function __construct()
     {
         app()->call([$this, 'initController']);
-
-        $this->initControllerAcl();
 
         // Execute method boot() on controller execute
         if (method_exists($this, 'boot')) {
@@ -141,7 +138,11 @@ trait Controller
             $this->before();
             $response = call_user_func_array([$this, $method], $parameters);
             $this->after($response);
-        } catch (ValidationException $e) {
+        } catch (\KodiCMS\CMS\Exceptions\ValidationException $e) {
+            $response = $this->buildFailedValidation(
+                $this->request, $e
+            );
+        } catch (\Illuminate\Validation\ValidationException $e) {
             $response = $this->buildFailedValidation(
                 $this->request, $e
             );

@@ -3,7 +3,7 @@
 namespace KodiCMS\CMS\Http\Controllers;
 
 use WYSIWYG;
-use KodiCMS\Users\Model\UserRole;
+use KodiCMS\Users\Model\Role;
 use KodiCMS\CMS\Model\FileCollection;
 
 abstract class AbstractFileController extends System\BackendController
@@ -45,7 +45,7 @@ abstract class AbstractFileController extends System\BackendController
     public function getCreate()
     {
         $file = $this->getFile();
-        $roles = UserRole::lists('name', 'name')->all();
+        $roles = Role::pluck('name', 'name')->all();
 
         $this->setTitle(trans($this->wrapNamespace("{$this->sectionPrefix}.title.create")));
         $this->templateScripts['FILE'] = $file->toArray();
@@ -83,7 +83,7 @@ abstract class AbstractFileController extends System\BackendController
     public function getEdit($filename)
     {
         $file = $this->getFile($filename);
-        $roles = UserRole::lists('name', 'name')->all();
+        $roles = Role::pluck('name', 'name')->all();
 
         $this->setTitle(trans($this->wrapNamespace("{$this->sectionPrefix}.title.edit"), [
             'name' => $file->getName(),

@@ -7,17 +7,20 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<title>{{ $title or 'Backend' }} &ndash; {{ config('cms.title') }}</title>
 	<link href="{{ asset('cms/favicon.ico') }}" rel="favourites icon" />
-	@yield('head')
+
+	@stack('head')
 
 	{!! Assets::getGroup('global', 'templateScripts') !!}
 	{!! Meta::render() !!}
 	{!! Assets::getGroup('global', 'frontendEvents') !!}
-	@yield('scripts')
+
+	@stack('scripts')
 </head>
 <body id="body.{{ $bodyId or 'backend' }}" class="{{ $theme or 'theme-default' }}">
 	{!! $content or NULL !!}
 
 	{!! Assets::getJsList(true) !!}
-	@yield('footer_scripts')
+
+	@stack('footer_scripts')
 </body>
 </html>

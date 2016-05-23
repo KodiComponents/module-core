@@ -16,8 +16,7 @@ $field = str_slug($field, '_');
 $slugify = !isset($slugify) ? TRUE : (bool) $slugify;
 ?>
 
-@section('scripts')
-	@parent
+@push('scripts')
 <script type="text/javascript">
 	var ROWS_DATA = {!! json_encode($data) !!};
 
@@ -49,7 +48,7 @@ $slugify = !isset($slugify) ? TRUE : (bool) $slugify;
 			.end();
 	}
 </script>
-@stop
+@endpush
 
 <div class="form-group" id="{{ $container }}">
 	@if( ! empty($label))

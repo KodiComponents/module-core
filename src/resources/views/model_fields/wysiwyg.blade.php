@@ -4,7 +4,6 @@
 	{!! $field->render() !!}
 </div>
 
-@section('scripts')
-@parent
+@push('scripts')
 <script>$(function() {CMS.filters.switchOn('{{ $field->getId() }}', DEFAULT_HTML_EDITOR)})</script>
-@stop
+@endpush

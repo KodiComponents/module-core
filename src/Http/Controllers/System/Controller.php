@@ -3,7 +3,6 @@
 namespace KodiCMS\CMS\Http\Controllers\System;
 
 use Illuminate\Http\RedirectResponse;
-use KodiCMS\Support\Traits\ControllerACL;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Exception\HttpResponseException;
@@ -13,14 +12,7 @@ use KodiCMS\Support\Traits\Controller as ControllerTrait;
 
 abstract class Controller extends BaseController
 {
-    use DispatchesJobs, ValidatesRequests, AuthorizesRequests, ControllerTrait, ControllerACL;
-
-    public function initMiddleware()
-    {
-        if ($this->authRequired) {
-            $this->middleware('backend.auth');
-        }
-    }
+    use DispatchesJobs, ValidatesRequests, AuthorizesRequests, ControllerTrait;
 
     /**
      * @param array       $parameters

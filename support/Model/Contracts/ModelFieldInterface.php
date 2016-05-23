@@ -3,8 +3,9 @@
 namespace KodiCMS\Support\Model\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
+use KodiCMS\CMS\Contracts\SettingsInterface;
 
-interface ModelFieldInterface
+interface ModelFieldInterface extends SettingsInterface
 {
     /**
      * @return string
