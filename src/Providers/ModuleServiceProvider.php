@@ -26,6 +26,23 @@ class ModuleServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        /** @var \App\Http\Kernel $kernel */
+        $kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
+
+        $kernel->pushMiddleware(\KodiCMS\CMS\Http\Middleware\PostJson::class);
+
+        /** @var \Illuminate\Routing\Router $router */
+        $router = $this->app['router'];
+
+        $middleware = $router->getMiddleware();
+        if (! isset($middleware['backend.auth'])) {
+            $router->middleware('backend.auth', \App\Http\Middleware\Authenticate::class);
+        }
+
+        if (! isset($middleware['backend.guest'])) {
+            $router->middleware('backend.guest', \App\Http\Middleware\RedirectIfAuthenticated::class);
+        }
+
         $this->registerAliases([
             'UI'             => UI::class,
             'Date'           => Date::class,
