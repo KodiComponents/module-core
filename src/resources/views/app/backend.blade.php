@@ -7,12 +7,15 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
 		<title>{{ $title or 'Backend' }} &ndash; {{ config('cms.title') }}</title>
 		<link href="{{ asset('cms/favicon.ico') }}" rel="favourites icon" />
-		@yield('head')
+
+		@stack('head')
 
 		{!! Assets::getGroup('global', 'templateScripts') !!}
 		{!! Meta::render() !!}
 		{!! Assets::getGroup('global', 'backendEvents') !!}
-		@yield('scripts')
+
+		@stack('scripts')
+
 	</head>
 	<body id="body.{{ $bodyId or 'backend' }}" class="{{ $requestType }} theme-{{ $theme or 'default' }} main-menu-fixed">
 		<div id="main-wrapper">
@@ -41,11 +44,14 @@
 				@include('cms::app.profiler')
 				@endif
 
+				@stack('footer')
+
 				@endif
 			</div>
 		</div>
 
 		{!! Assets::getJsList(true) !!}
-		@yield('footer_scripts')
+
+		@stack('footer_scripts')
 	</body>
 </html>
