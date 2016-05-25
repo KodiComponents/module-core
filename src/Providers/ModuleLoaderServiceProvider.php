@@ -2,10 +2,10 @@
 
 namespace KodiCMS\CMS\Providers;
 
-use KodiCMS\CMS\CMS;
 use Collective\Html\FormFacade;
 use Collective\Html\HtmlFacade;
 use KodiCMS\CMS\Navigation\Page;
+use KodiCMS\Support\Facades\CMS;
 use KodiCMS\Support\Facades\Wysiwyg;
 use KodiCMS\Support\Helpers\Profiler;
 use Illuminate\Foundation\AliasLoader;
@@ -48,9 +48,38 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
      */
     public function register()
     {
+        $this->registerCoreProviders();
+        $this->registerBackendNavigation();
+
         $this->app->singleton('cms', function () {
             return new \KodiCMS\CMS\CMS();
         });
+
+        $this->registerAliases();
+        $this->registerProviders();
+        $this->registerConsoleCommands();
+    }
+
+    /**
+     * Register aliases.
+     */
+    protected function registerAliases()
+    {
+        AliasLoader::getInstance([
+            'ModulesLoader'     => ModulesLoaderFacade::class,
+            'ModulesFileSystem' => ModulesFileSystemFacade::class,
+            'CMS'               => CMS::class,
+            'DatabaseConfig'    => DatabaseConfig::class,
+            'Profiler'          => Profiler::class,
+            'WYSIWYG'           => Wysiwyg::class,
+            'Form'              => FormFacade::class,
+            'HTML'              => HtmlFacade::class,
+            'Navigation'        => \KodiCMS\Support\Facades\Navigation::class
+        ]);
+    }
+
+    private function registerCoreProviders()
+    {
         if (class_exists($provider = '\KodiCMS\Users\Providers\AuthServiceProvider')) {
             $this->providers[50] = $provider;
         }
@@ -81,36 +110,17 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
             return new ModulesLoader($modules);
         });
 
+        $this->app->singleton('modules.filesystem', function ($app) {
+            return new ModulesFileSystem($app['modules.loader'], $app['files']);
+        });
+    }
+
+    private function registerBackendNavigation()
+    {
         $this->app->bind(\KodiComponents\Navigation\Contracts\PageInterface::class, Page::class);
 
         $this->app->singleton('navigation', function () {
             return new Navigation();
         });
-
-        $this->app->singleton('modules.filesystem', function ($app) {
-            return new ModulesFileSystem($app['modules.loader'], $app['files']);
-        });
-
-        $this->registerAliases();
-        $this->registerProviders();
-        $this->registerConsoleCommands();
-    }
-
-    /**
-     * Register aliases.
-     */
-    protected function registerAliases()
-    {
-        AliasLoader::getInstance([
-            'ModulesLoader'     => ModulesLoaderFacade::class,
-            'ModulesFileSystem' => ModulesFileSystemFacade::class,
-            'CMS'               => CMS::class,
-            'DatabaseConfig'    => DatabaseConfig::class,
-            'Profiler'          => Profiler::class,
-            'WYSIWYG'           => Wysiwyg::class,
-            'Form'              => FormFacade::class,
-            'HTML'              => HtmlFacade::class,
-            'Navigation'        => \KodiCMS\Support\Facades\Navigation::class
-        ]);
     }
 }

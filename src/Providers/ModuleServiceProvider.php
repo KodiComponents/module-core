@@ -4,45 +4,30 @@ namespace KodiCMS\CMS\Providers;
 
 use Blade;
 use Cache;
-use KodiCMS\CMS\CMS;
-use Navigation;
-use KodiCMS\Support\Helpers\UI;
-use KodiCMS\Assets\Facades\Meta;
-use KodiCMS\Support\Helpers\Date;
 use KodiCMS\Assets\Facades\Assets;
-use KodiCMS\Support\ServiceProvider;
+use KodiCMS\Assets\Facades\Meta;
 use KodiCMS\Assets\Facades\PackageManager;
-use KodiCMS\Support\Cache\SqLiteTaggedStore;
-use KodiCMS\Support\Cache\DatabaseTaggedStore;
-use KodiCMS\CMS\Console\Commands\WysiwygListCommand;
-use KodiCMS\CMS\Console\Commands\ModuleInstallCommand;
-use KodiCMS\CMS\Console\Commands\ModulePublishCommand;
+use KodiCMS\CMS\CMS;
 use KodiCMS\CMS\Console\Commands\ControllerMakeCommand;
+use KodiCMS\CMS\Console\Commands\GenerateScriptTranslatesCommand;
+use KodiCMS\CMS\Console\Commands\ModuleInstallCommand;
 use KodiCMS\CMS\Console\Commands\ModuleLocaleDiffCommand;
 use KodiCMS\CMS\Console\Commands\ModuleLocalePublishCommand;
-use KodiCMS\CMS\Console\Commands\GenerateScriptTranslatesCommand;
+use KodiCMS\CMS\Console\Commands\ModulePublishCommand;
+use KodiCMS\CMS\Console\Commands\WysiwygListCommand;
+use KodiCMS\Support\Cache\DatabaseTaggedStore;
+use KodiCMS\Support\Cache\SqLiteTaggedStore;
+use KodiCMS\Support\Helpers\Date;
+use KodiCMS\Support\Helpers\UI;
+use KodiCMS\Support\ServiceProvider;
 use KodiCMS\Users\Model\Permission;
+use Navigation;
 
 class ModuleServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        /** @var \App\Http\Kernel $kernel */
-        $kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
-
-        $kernel->pushMiddleware(\KodiCMS\CMS\Http\Middleware\PostJson::class);
-
-        /** @var \Illuminate\Routing\Router $router */
-        $router = $this->app['router'];
-
-        $middleware = $router->getMiddleware();
-        if (! isset($middleware['backend.auth'])) {
-            $router->middleware('backend.auth', \App\Http\Middleware\Authenticate::class);
-        }
-
-        if (! isset($middleware['backend.guest'])) {
-            $router->middleware('backend.guest', \App\Http\Middleware\RedirectIfAuthenticated::class);
-        }
+        $this->registerMiddlewares();
 
         $this->registerAliases([
             'UI'             => UI::class,
@@ -61,17 +46,18 @@ class ModuleServiceProvider extends ServiceProvider
             WysiwygListCommand::class,
             ModuleInstallCommand::class
         ]);
-
-        Permission::register('cms', 'system', [
-            'view_phpinfo',
-            'view_about',
-            'view_settings'
-        ]);
-
     }
 
     public function boot()
     {
+        // TODO fix bug
+        spl_autoload_call(\KodiCMS\CMS\Exceptions\Handler::class);
+
+        $this->app->singleton(
+            \Illuminate\Contracts\Debug\ExceptionHandler::class,
+            \KodiCMS\CMS\Exceptions\Handler::class
+        );
+
         Blade::directive('event', function ($expression) {
             return "<?php event{$expression}; ?>";
         });
@@ -81,7 +67,7 @@ class ModuleServiceProvider extends ServiceProvider
          ], 'kodicms');
 
         $this->registerCacheDrivers();
-        $this->registerNavigation();
+        $this->registerPermissions();
     }
 
     protected function registerCacheDrivers()
@@ -106,7 +92,7 @@ class ModuleServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerNavigation()
+    public function contextBackend()
     {
         Navigation::setFromArray([
             [
@@ -139,6 +125,34 @@ class ModuleServiceProvider extends ServiceProvider
                     ],
                 ],
             ],
+        ]);
+    }
+
+    private function registerPermissions()
+    {
+        Permission::register('cms', 'system', [
+            'view_phpinfo',
+            'view_about',
+            'view_settings'
+        ]);
+    }
+
+    private function registerMiddlewares()
+    {
+        /** @var \Illuminate\Routing\Router $router */
+        $router = $this->app['router'];
+
+        $router->middleware('context', \KodiCMS\CMS\Http\Middleware\Context::class);
+
+        $router->middlewareGroup('backend', [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \KodiCMS\CMS\Http\Middleware\VerifyCsrfToken::class,
+            \KodiCMS\CMS\Http\Middleware\PostJson::class,
+            'context:'.CMS::CONTEXT_BACKEND,
+            'backend.auth',
         ]);
     }
 }
