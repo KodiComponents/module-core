@@ -10,7 +10,7 @@
 		<tbody>
 		<tr>
 			<th>@lang('cms::system.label.about.cms')</th>
-			<td>{{ CMS::NAME }} v{{ CMS::VERSION }}</td>
+			<td>{{ CMS::getFullName() }}</td>
 		</tr>
 		<tr>
 			<th>@lang('cms::system.label.about.framework')</th>
@@ -99,7 +99,7 @@
 		@endforeach
 	</div>
 
-	@if (function_exists('phpinfo') and Gate::allows('system.view_phpinfo'))
+	@if (function_exists('phpinfo') and BackendGate::allows('system.view_phpinfo'))
 	<div class="panel-heading">
 		<span class="panel-title">@lang('cms::system.tab.about.php_info')</span>
 	</div>

@@ -47,7 +47,7 @@ class Page extends \KodiComponents\Navigation\Page
     {
         if (! empty($this->permissions)) {
             foreach ($this->permissions as $permission) {
-                if (\Gate::allows($permission)) {
+                if (\BackendGate::allows($permission)) {
                     return true;
                 }
             }

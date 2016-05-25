@@ -79,9 +79,8 @@ trait Controller
         $this->response = $response;
         $this->session = $session;
 
-        $this->requestType = $this->request->input('type', $this->request->method());
-
-        $this->currentUser = Auth::user();
+        $this->requestType = $request->input('type', $request->method());
+        $this->currentUser = $request->user('backend');
     }
 
     /**

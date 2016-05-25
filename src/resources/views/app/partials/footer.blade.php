@@ -3,7 +3,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-8 text-muted">
-					&copy; 2012 - {{ date('Y')  }} {!! HTML::link(CMS::WEBSITE, CMS::NAME) !!} v{{ CMS::VERSION }}
+					&copy; 2012 - {{ date('Y')  }} {!! HTML::link(CMS::getWebsite(), CMS::getFullName()) !!}
 						   &nbsp;&nbsp;&HorizontalLine;&nbsp;&nbsp;
 					{!! trans('cms::core.footer.poweredBy', [
 						'framework' => HTML::link('http://laravel.com/', 'Laravel'),

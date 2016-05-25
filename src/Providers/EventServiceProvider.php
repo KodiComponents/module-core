@@ -3,19 +3,20 @@
 namespace KodiCMS\CMS\Providers;
 
 use Config;
+use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as BaseEventServiceProvider;
 use KodiCMS\CMS\Events\BackendSettingsSave;
 use KodiCMS\CMS\Events\BackendSettingsValidate;
-use WYSIWYG;
-use Profiler;
-use PDOException;
 use KodiCMS\CMS\Helpers\DatabaseConfig;
 use KodiCMS\CMS\Listeners\BackendSettingsSaveListener;
 use KodiCMS\CMS\Listeners\BackendSettingsValidateListener;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as BaseEventServiceProvider;
+use PDOException;
+use Profiler;
+use WYSIWYG;
 
 class EventServiceProvider extends BaseEventServiceProvider
 {
+
     /**
      * The event handler mappings for the application.
      *
@@ -23,10 +24,10 @@ class EventServiceProvider extends BaseEventServiceProvider
      */
     protected $listen = [
         BackendSettingsValidate::class => [
-            BackendSettingsValidateListener::class
+            BackendSettingsValidateListener::class,
         ],
-        BackendSettingsSave::class     => [
-            BackendSettingsSaveListener::class
+        BackendSettingsSave::class => [
+            BackendSettingsSaveListener::class,
         ],
     ];
 
@@ -46,6 +47,25 @@ class EventServiceProvider extends BaseEventServiceProvider
             echo view('cms::ace.settings')->with('availableACEThemes', config('cms.wysiwyg.ace_themes'));
         });
 
+        $this->registerDatabaseConfig($events);
+        $this->registerDatabaseProfiler();
+    }
+
+    private function registerDatabaseProfiler()
+    {
+        \DB::listen(function ($query) {
+            $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
+            $sql = vsprintf($sql, $query->bindings);
+
+            Profiler::append('Database '.$query->connectionName, $sql, $query->time / 1000);
+        });
+    }
+
+    /**
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
+     */
+    private function registerDatabaseConfig($events)
+    {
         $events->listen('config.loaded', function () {
             if (cms_installed()) {
                 try {
@@ -56,15 +76,9 @@ class EventServiceProvider extends BaseEventServiceProvider
                     foreach ($config as $group => $data) {
                         Config::set($group, array_merge(Config::get($group, []), $data));
                     }
-                } catch (PDOException $e) {}
+                } catch (PDOException $e) {
+                }
             }
         }, 999);
-
-        \DB::listen(function ($query) {
-            $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
-            $sql = vsprintf($sql, $query->bindings);
-
-            Profiler::append('Database '.$query->connectionName, $sql, $query->time / 1000);
-        });
     }
 }

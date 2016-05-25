@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @return string
  */
@@ -104,4 +105,12 @@ function array_keys_exists_recursive(array $arr1, array $arr2)
 function __($string)
 {
     return $string;
+}
+
+/**
+ * @return \Illuminate\Contracts\Auth\Factory
+ */
+function backend_auth()
+{
+    return auth('backend');
 }

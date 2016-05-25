@@ -2,12 +2,12 @@
 
 namespace KodiCMS\CMS\Http\Controllers\System;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Http\Exception\HttpResponseException;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller as BaseController;
 use KodiCMS\Support\Traits\Controller as ControllerTrait;
 
 abstract class Controller extends BaseController
@@ -18,7 +18,7 @@ abstract class Controller extends BaseController
      * @param array       $parameters
      * @param string|null $route
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|null
      */
     public function smartRedirect(array $parameters = [], $route = null)
     {
@@ -34,6 +34,10 @@ abstract class Controller extends BaseController
             $route = action($route, $parameters);
         } else {
             $route = route($route, $parameters);
+        }
+
+        if ($this->request->getMethod() == 'GET' and $route == $this->request->getUri()) {
+            return;
         }
 
         if ($isContinue and $this->getCurrentAction() != 'postCreate') {

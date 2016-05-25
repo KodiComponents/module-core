@@ -2,12 +2,12 @@
 
 namespace KodiCMS\CMS\Http\Controllers\System;
 
-use UI;
-use Meta;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use KodiCMS\CMS\Breadcrumbs\Collection as Breadcrumbs;
 use KodiCMS\Navigation\Navigation;
 use KodiCMS\Support\Helpers\Callback;
-use KodiCMS\CMS\Breadcrumbs\Collection as Breadcrumbs;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Meta;
+use UI;
 
 class BackendController extends TemplateController
 {
@@ -24,6 +24,7 @@ class BackendController extends TemplateController
     public function boot()
     {
         $this->navigation = app('navigation');
+
         $this->breadcrumbs = new Breadcrumbs;
     }
 
@@ -96,9 +97,9 @@ class BackendController extends TemplateController
                 $message = $e->getMessage();
             }
 
-            $this->throwFailException(
-                $this->smartRedirect()->withErrors($message)
-            );
+            if ($redirect = $this->smartRedirect()) {
+                $this->throwFailException($redirect->withErrors($message));
+            }
         }
     }
 }
