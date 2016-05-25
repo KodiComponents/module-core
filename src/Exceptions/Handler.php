@@ -3,31 +3,16 @@
 namespace KodiCMS\CMS\Exceptions;
 
 use Exception;
-use Illuminate\Http\Response;
-use KodiCMS\API\Http\Response as APIResponse;
-use KodiCMS\CMS\Exceptions\ValidationException;
-use KodiCMS\CMS\Http\Controllers\ErrorController;
-use Illuminate\Auth\Access\AuthorizationException;
-use KodiCMS\API\Exceptions\Exception as APIException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Response;
+use KodiCMS\API\Exceptions\Exception as APIException;
+use KodiCMS\API\Http\Response as APIResponse;
+use KodiCMS\CMS\Http\Controllers\ErrorController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Handler extends ExceptionHandler
+class Handler extends \App\Exceptions\Handler
 {
-    /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
-     */
-    protected $dontReport = [
-        HttpException::class,
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
-    ];
 
     /**
      * Report or log an exception.
@@ -40,6 +25,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
+        $this->dontReport[] = \Illuminate\Validation\ValidationException::class;
+
         return parent::report($e);
     }
 
@@ -60,14 +47,11 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
-
-        if ((config('app.debug')and ! app()->runningInConsole()) or ! cms_installed()) {
-            return $this->renderExceptionWithWhoops($e);
-        } elseif (! $this->isHttpException($e)) {
-            return $this->renderException($e);
+        if (\CMS::isBackend()) {
+            return $this->renderControllerException($e);
         }
 
-        return $this->renderHttpException($e);
+        return parent::render($request, $e);
     }
 
     /**
@@ -81,38 +65,24 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render the given HttpException.
-     *
-     * @param  \Symfony\Component\HttpKernel\Exception\HttpException $e
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function renderHttpException(HttpException $e)
-    {
-        return $this->renderControllerException($e, $e->getStatusCode());
-    }
-
-    /**
-     * @param  \Exception $e
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function renderException(Exception $e)
-    {
-        return $this->renderControllerException($e, 500);
-    }
-
-    /**
      * Render an exception using ErrorController.
      *
      * @param  Exception $e
-     * @param  int        $code
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderControllerException(Exception $e, $code = 500)
+    protected function renderControllerException(Exception $e)
     {
+        $code = 500;
+
+        if ($e instanceof HttpResponseException) {
+            $code = $e->getStatusCode();
+        } else if ($e->getCode() > 0) {
+            $code = $e->getCode();
+        }
+
         try {
+            /** @var ErrorController $controller */
             $controller = app()->make(ErrorController::class);
 
             if (method_exists($controller, 'error'.$code)) {
@@ -127,24 +97,9 @@ class Handler extends ExceptionHandler
                 $response = new Response($response);
             }
 
-            return $this->toIlluminateResponse($response);
-        } catch (Exception $ex) {
+            return $this->toIlluminateResponse($response, $e);
+        } catch (\Exception $ex) {
             return $this->toIlluminateResponse($this->convertExceptionToResponse($ex), $ex);
         }
-    }
-
-    /**
-     * Render an exception using Whoops.
-     *
-     * @param  \Exception $e
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function renderExceptionWithWhoops(Exception $e)
-    {
-        $whoops = new \Whoops\Run;
-        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-
-        return $this->toIlluminateResponse($whoops->handleException($e), $e);
     }
 }

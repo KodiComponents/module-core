@@ -6,12 +6,26 @@ use Exception;
 
 class ErrorController extends System\FrontendController
 {
+
+    /**
+     * @var string
+     */
+    public $moduleNamespace = 'cms::';
+
     /**
      * @param Exception $e
      */
     public function error500(Exception $e)
     {
         $this->render($e, 500, $e->getMessage());
+    }
+    
+    /**
+     * @param Exception $e
+     */
+    public function errorDefault(Exception $e)
+    {
+        $this->error500($e);
     }
 
     /**

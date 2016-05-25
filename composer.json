@@ -33,7 +33,6 @@
   "require": {
     "laravel/framework": "5.2.*",
     "laravelcollective/html": "5.*",
-    "filp/whoops": "~1.0",
     "guzzlehttp/guzzle": "~5.0",
     "erusev/parsedown": "1.*",
     "doctrine/dbal": "~2.3",
