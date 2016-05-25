@@ -68,7 +68,6 @@ class ModuleServiceProvider extends ServiceProvider
             'view_settings'
         ]);
 
-        $this->app->singleton('cms', CMS::class);
     }
 
     public function boot()

@@ -48,6 +48,9 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('cms', function () {
+            return new \KodiCMS\CMS\CMS();
+        });
         if (class_exists($provider = '\KodiCMS\Users\Providers\AuthServiceProvider')) {
             $this->providers[50] = $provider;
         }

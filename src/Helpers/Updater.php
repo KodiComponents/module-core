@@ -82,7 +82,7 @@ class Updater
 
         $this->remoteVersion = $version;
 
-        return $this->newsVersion = version_compare($this->remoteVersion, CMS::VERSION) == static::VERSION_NEW;
+        return $this->newsVersion = version_compare($this->remoteVersion, CMS::getVersion()) == static::VERSION_NEW;
     }
 
     /**

@@ -2,13 +2,68 @@
 
 namespace KodiCMS\CMS;
 
+use Illuminate\Support\Str;
+
 class CMS
 {
+
     const VERSION = '0.3.1 beta';
-    const NAME = 'KodiCMS';
+    const NAME    = 'KodiCMS';
     const WEBSITE = 'http://kodicms.ru';
 
     const CMS_PREFIX = 'cms';
+
+    const CONTEXT_BACKEND = 'backend';
+
+    /**
+     * @var array
+     */
+    protected $context = [];
+
+    /**
+     * @var array
+     */
+    protected $contextInited = [];
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return "{$this->getName()} v.{$this->getVersion()}";
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return static::VERSION;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return static::NAME;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite()
+    {
+        return static::WEBSITE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return static::CMS_PREFIX;
+    }
 
     /**
      * @return bool
@@ -16,6 +71,14 @@ class CMS
     public function isInstalled()
     {
         return is_file(base_path(app()->environmentFile()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBackend()
+    {
+        return $this->contextExists(static::CONTEXT_BACKEND);
     }
 
     /**
@@ -53,7 +116,9 @@ class CMS
      */
     public function backendResourcesPath($path = null)
     {
-        return public_path(static::CMS_PREFIX.DIRECTORY_SEPARATOR.(! is_null($path) ? normalize_path($path) : $path));
+        return public_path(static::CMS_PREFIX.DIRECTORY_SEPARATOR.(! is_null($path)
+                ? normalize_path($path)
+                : $path));
     }
 
     /**
@@ -67,6 +132,54 @@ class CMS
     }
 
     /**
+     * @param string $context
+     *
+     * @return $this
+     */
+    public function setContext($context)
+    {
+        if (! $this->contextExists($context)) {
+            $this->context[] = $context;
+
+            foreach (app('modules.loader')->getRegisteredModules() as $module) {
+                if (! is_null($provider = $module->getProvider())) {
+                    if (method_exists($provider, $method = 'context'.Str::studly($context))) {
+                        app()->call([$provider, $method]);
+                    }
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * @param string $context
+     *
+     * @return bool
+     */
+    public function contextExists($context)
+    {
+        return in_array($context, $this->context);
+    }
+
+    /**
+     * @return $this
+     */
+    public function setBackendContext()
+    {
+        return $this->setContext(static::CONTEXT_BACKEND);
+    }
+
+    /**
      * @param string $path
      * @param string $separator
      *
@@ -74,6 +187,8 @@ class CMS
      */
     protected function trimPath($path, $separator = '/')
     {
-        return ! is_null($path) ? $separator.ltrim($path, $separator) : $path;
+        return ! is_null($path)
+            ? $separator.ltrim($path, $separator)
+            : $path;
     }
 }
