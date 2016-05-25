@@ -87,7 +87,8 @@ class ModuleInstallCommand extends Command
         $this->files->put($modulesCachePath, str_replace('{{modules}}', var_export($moduleInfo, true), $stub));
 
         $this->call('vendor:publish', [
-            '--tag' => ['kodicms']
+            '--tag' => ['kodicms'],
+            '--force' => true,
         ]);
     }
 
