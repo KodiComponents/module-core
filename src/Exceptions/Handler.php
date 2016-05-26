@@ -5,11 +5,11 @@ namespace KodiCMS\CMS\Exceptions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use KodiCMS\API\Exceptions\Exception as APIException;
+use Illuminate\Validation\ValidationException;
 use KodiCMS\API\Http\Response as APIResponse;
 use KodiCMS\CMS\Http\Controllers\ErrorController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends \App\Exceptions\Handler
 {
@@ -25,7 +25,7 @@ class Handler extends \App\Exceptions\Handler
      */
     public function report(Exception $e)
     {
-        $this->dontReport[] = \Illuminate\Validation\ValidationException::class;
+        $this->dontReport[] = ValidationException::class;
 
         return parent::report($e);
     }
@@ -40,14 +40,19 @@ class Handler extends \App\Exceptions\Handler
      */
     public function render($request, Exception $e)
     {
-        if ($request->ajax() or ($e instanceof APIException)) {
-            return $this->renderApiException($e);
+        if ($request->ajax() or ($e instanceof \KodiCMS\API\Exceptions\Exception)) {
+            return $this->sendResponseForApiException($e);
         }
 
-        if ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
-        }
         if (\CMS::isBackend()) {
+            if ($e instanceof ModelNotFoundException) {
+                return $this->sendResponseForModelNotFound($e);
+            }
+
+            if ($e instanceof ValidationException) {
+                return $this->sendResponseForValidationError($request, $e);
+            }
+
             return $this->renderControllerException($e);
         }
 
@@ -59,7 +64,7 @@ class Handler extends \App\Exceptions\Handler
      *
      * @return APIResponse
      */
-    protected function renderApiException(Exception $e)
+    protected function sendResponseForApiException(Exception $e)
     {
         return (new APIResponse(config('app.debug')))->createExceptionResponse($e);
     }
@@ -101,5 +106,33 @@ class Handler extends \App\Exceptions\Handler
         } catch (\Exception $ex) {
             return $this->toIlluminateResponse($this->convertExceptionToResponse($ex), $ex);
         }
+    }
+
+    /**
+     * @param ModelNotFoundException $e
+     *
+     * @return Response
+     */
+    private function sendResponseForModelNotFound(ModelNotFoundException $e)
+    {
+        $model = $e->getModel();
+        if (method_exists($model, 'getNotFoundMessage')) {
+            $message = app()->call("{$model}@getNotFoundMessage");
+        } else {
+            $message = trans('cms::core.messages.model_not_found');
+        }
+
+        return back()->withErrors($message, 'model_not_found');
+    }
+
+    /**
+     * @param Request             $request
+     * @param ValidationException $e
+     *
+     * @return Response
+     */
+    private function sendResponseForValidationError(Request $request, ValidationException $e)
+    {
+        return $e->getResponse();
     }
 }

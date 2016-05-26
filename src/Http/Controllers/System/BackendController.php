@@ -76,30 +76,4 @@ class BackendController extends TemplateController
         $this->includeModuleMediaFile($this->getRouterController());
         $this->includeMergedMediaFile('backendEvents', 'js/backendEvents');
     }
-
-    /**
-     * Execute an action on the controller.
-     *
-     * @param  string $method
-     * @param  array  $parameters
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function callAction($method, $parameters)
-    {
-        try {
-            return parent::callAction($method, $parameters);
-        } catch (ModelNotFoundException $e) {
-            $model = $e->getModel();
-            if (method_exists($model, 'getNotFoundMessage')) {
-                $message = Callback::invoke($model.'@'.'getNotFoundMessage');
-            } else {
-                $message = $e->getMessage();
-            }
-
-            if ($redirect = $this->smartRedirect()) {
-                $this->throwFailException($redirect->withErrors($message));
-            }
-        }
-    }
 }

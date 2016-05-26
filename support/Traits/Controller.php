@@ -2,7 +2,6 @@
 
 namespace KodiCMS\Support\Traits;
 
-use Auth;
 use ModulesFileSystem;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -27,7 +26,7 @@ trait Controller
     protected $response;
 
     /**
-     * @var Session
+     * @var SessionStore
      */
     protected $session;
 
@@ -133,36 +132,11 @@ trait Controller
      */
     public function callAction($method, $parameters)
     {
-        try {
-            $this->before();
-            $response = call_user_func_array([$this, $method], $parameters);
-            $this->after($response);
-        } catch (\KodiCMS\CMS\Exceptions\ValidationException $e) {
-            $response = $this->buildFailedValidation(
-                $this->request, $e
-            );
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            $response = $this->buildFailedValidation(
-                $this->request, $e
-            );
-        }
+        $this->before();
+        $response = call_user_func_array([$this, $method], $parameters);
+        $this->after($response);
 
         return $response;
-    }
-
-    /**
-     * @param Request                                    $request
-     * @param \Illuminate\Validation\ValidationException $e
-     *
-     * @return $this|JsonResponse
-     */
-    protected function buildFailedValidation(Request $request, \Illuminate\Validation\ValidationException $e)
-    {
-        $errors = $this->formatValidationErrors($e->validator);
-
-        return redirect()->to($this->getRedirectUrl())
-            ->withInput($request->input())
-            ->withErrors($errors, $this->errorBag());
     }
 
     /**
