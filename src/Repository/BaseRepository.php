@@ -2,13 +2,15 @@
 
 namespace KodiCMS\CMS\Repository;
 
-use Validator;
 use Illuminate\Database\Eloquent\Model;
-use KodiCMS\CMS\Exceptions\ValidationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use KodiCMS\CMS\Contracts\RepositoryInterface;
 
-class BaseRepository
+class BaseRepository implements RepositoryInterface
 {
+    use ValidatesRequests;
+
     /**
      * @var Model
      */
@@ -28,15 +30,23 @@ class BaseRepository
     }
 
     /**
-     * @return array
+     * @{@inheritdoc}
      */
-    public function validatorAttributeNames()
+    public function validationAttributes()
     {
         return [];
     }
 
     /**
-     * @return Model
+     * @{@inheritdoc}
+     */
+    public function validationRules()
+    {
+        return [];
+    }
+
+    /**
+     * @{@inheritdoc}
      */
     public function getModel()
     {
@@ -44,7 +54,7 @@ class BaseRepository
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|Model[]
+     * @{@inheritdoc}
      */
     public function all()
     {
@@ -52,9 +62,7 @@ class BaseRepository
     }
 
     /**
-     * @param int $id
-     *
-     * @return Model|null
+     * @{@inheritdoc}
      */
     public function find($id)
     {
@@ -62,10 +70,7 @@ class BaseRepository
     }
 
     /**
-     * @param int $id
-     *
-     * @return Model
-     * @throws ModelNotFoundException
+     * @{@inheritdoc}
      */
     public function findOrFail($id)
     {
@@ -73,7 +78,7 @@ class BaseRepository
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @{@inheritdoc}
      */
     public function query()
     {
@@ -81,9 +86,7 @@ class BaseRepository
     }
 
     /**
-     * @param array $attributes
-     *
-     * @return Model
+     * @{@inheritdoc}
      */
     public function instance(array $attributes = [])
     {
@@ -93,9 +96,7 @@ class BaseRepository
     }
 
     /**
-     * @param int|null $perPage
-     *
-     * @return mixed
+     * @{@inheritdoc}
      */
     public function paginate($perPage = null)
     {
@@ -103,42 +104,7 @@ class BaseRepository
     }
 
     /**
-     * @param array $data
-     * @param null  $rules
-     * @param array $messages
-     * @param array $customAttributes
-     *
-     * @return \Illuminate\Validation\Validator
-     */
-    public function validator(array $data = [], $rules = null, array $messages = [], array $customAttributes = [])
-    {
-        if (is_null($rules)) {
-            $rules = $this->validationRules;
-        }
-
-        return Validator::make($data, $rules, $messages, $customAttributes);
-    }
-
-    /**
-     * @param array $data
-     * @param null  $rules
-     * @param array $messages
-     * @param array $customAttributes
-     *
-     * @return bool
-     * @throws ValidationException
-     */
-    public function validate(array $data = [], $rules = null, array $messages = [], array $customAttributes = [])
-    {
-        $validator = $this->validator($data, $rules, $messages, $customAttributes);
-
-        return $this->_validate($validator);
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return Model
+     * @{@inheritdoc}
      */
     public function create(array $data = [])
     {
@@ -146,10 +112,7 @@ class BaseRepository
     }
 
     /**
-     * @param int $id
-     * @param array   $data
-     *
-     * @return Model
+     * @{@inheritdoc}
      */
     public function update($id, array $data = [])
     {
@@ -160,10 +123,7 @@ class BaseRepository
     }
 
     /**
-     * @param int $id
-     *
-     * @return Model
-     * @throws \Exception
+     * @{@inheritdoc}
      */
     public function delete($id)
     {
@@ -174,21 +134,14 @@ class BaseRepository
     }
 
     /**
-     * @param \Illuminate\Validation\Validator $validator
-     *
-     * @return bool
-     * @throws ValidationException
+     * @{@inheritdoc}
      */
-    protected function _validate(\Illuminate\Validation\Validator $validator)
+    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
-        if (! empty($attributeNames = $this->validatorAttributeNames())) {
-            $validator->setAttributeNames($attributeNames);
-        }
+        $validator = $this->getValidationFactory()->make($request->all(), array_merge($this->validationRules(), $rules), $messages, array_merge($this->validationAttributes(), $customAttributes));
 
         if ($validator->fails()) {
-            throw new ValidationException($validator);
+            $this->throwValidationException($request, $validator);
         }
-
-        return true;
     }
 }
