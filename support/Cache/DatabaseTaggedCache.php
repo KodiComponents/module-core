@@ -3,10 +3,10 @@
 namespace KodiCMS\Support\Cache;
 
 use Closure;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Cache\RetrievesMultipleKeys;
+use Illuminate\Cache\TaggedCache;
 
-class DatabaseTaggedCache implements Store
+class DatabaseTaggedCache extends TaggedCache
 {
     use RetrievesMultipleKeys;
 
