@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 class CMS
 {
 
-    const VERSION = '0.3.1 beta';
+    const VERSION = '0.5.1 beta';
     const NAME    = 'KodiCMS';
-    const WEBSITE = 'http://kodicms.ru';
+    const WEBSITE = 'http://kodicms.com';
 
     const CMS_PREFIX = 'cms';
 
