@@ -27,7 +27,7 @@ class Page extends \KodiComponents\Navigation\Page
     /**
      * @param array $permissions
      *
-     * @return $this     *
+     * @return $this
      */
     public function setPermissions($permissions)
     {
@@ -87,11 +87,11 @@ class Page extends \KodiComponents\Navigation\Page
      */
     public function toArray()
     {
-        if ($this->isActive()) {
-            $this->setHtmlAttribute('class', 'active');
+        if ($this->isActive() and ! $this->hasClassProperty(['active', 'open'])) {
+            $this->setHtmlAttribute('class', 'active open');
         }
 
-        if ($this->hasChild()) {
+        if ($this->hasChild() and ! $this->hasClassProperty('mm-dropdown')) {
             $this->setHtmlAttribute('class', 'mm-dropdown');
         }
 
