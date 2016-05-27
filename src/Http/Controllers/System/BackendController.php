@@ -2,10 +2,8 @@
 
 namespace KodiCMS\CMS\Http\Controllers\System;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use KodiCMS\CMS\Breadcrumbs\Collection as Breadcrumbs;
-use KodiCMS\Navigation\Navigation;
-use KodiCMS\Support\Helpers\Callback;
+use KodiCMS\CMS\Exceptions\PermissionsException;
 use Meta;
 use UI;
 
@@ -33,6 +31,10 @@ class BackendController extends TemplateController
         $this->breadcrumbs->add(UI::icon('home'), route('backend.dashboard'));
 
         if ($currentPage = $this->navigation->getCurrentPage()) {
+            if (! $currentPage->checkAccess()) {
+                throw new PermissionsException(trans('cms::core.messages.no_access'), 403);
+            }
+            
             foreach ($currentPage->getPathArray() as $page) {
                 $this->breadcrumbs->add($page['title'], $page['url']);
             }
