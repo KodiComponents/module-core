@@ -31,9 +31,7 @@ class BackendController extends TemplateController
         $this->breadcrumbs->add(UI::icon('home'), route('backend.dashboard'));
 
         if ($currentPage = $this->navigation->getCurrentPage()) {
-            if (! $currentPage->checkAccess()) {
-                throw new PermissionsException(trans('cms::core.messages.no_access'), 403);
-            }
+            $this->checkAccess($currentPage);
             
             foreach ($currentPage->getPathArray() as $page) {
                 $this->breadcrumbs->add($page['title'], $page['url']);
@@ -77,5 +75,12 @@ class BackendController extends TemplateController
         Meta::loadPackage('libraries', 'core');
         $this->includeModuleMediaFile($this->getRouterController());
         $this->includeMergedMediaFile('backendEvents', 'js/backendEvents');
+    }
+
+    public function checkAccess($page)
+    {
+        if (! $page->checkAccess()) {
+            throw new PermissionsException(trans('cms::core.messages.no_access'), 403);
+        }
     }
 }
