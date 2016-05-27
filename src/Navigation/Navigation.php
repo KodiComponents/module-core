@@ -12,9 +12,18 @@ class Navigation extends \KodiComponents\Navigation\Navigation
      */
     public function render()
     {
+        return parent::render('cms::navigation.navigation');
+    }
+
+    /**
+     * @return $this
+     */
+    public function filterByAccessRights()
+    {
+        parent::filterByAccessRights();
         $this->filterEmptyPages();
 
-        return parent::render('cms::navigation.navigation');
+        return $this;
     }
 
     protected function filterEmptyPages()
