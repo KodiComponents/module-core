@@ -6,7 +6,7 @@ $(function() {
 	});
 
 	try {
-		i18n.init({
+		i18next.init({
 			lng: LOCALE,
 			fallbackLng: 'ru',
 			useLocalStorage: true,

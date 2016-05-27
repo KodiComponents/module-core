@@ -6,7 +6,11 @@
     "bootstrap": "latest",
     "ckeditor": "latest",
     "colorbox": "latest",
+
     "datetimepicker": "latest",
+    "php-date-formatter": "latest",
+    "moment": "latest",
+
     "dropzone": "latest",
     "fastclick": "latest",
     "fontawesome": "latest",
@@ -19,7 +23,6 @@
     "jquery-ui": "latest",
     "jquery-validation": "latest",
     "jquery.tagsinput": "latest",
-    "moment": "latest",
     "nestable": "latest",
     "noty": "latest",
     "select2": "latest",

@@ -33,6 +33,7 @@ elixir(function(mix) {
 			'libs/jquery-validation/js/jquery.validate.js',
 			'libs/jquery-validation/js/additional-methods.js',
 			'libs/dropzone/js/dropzone.min.js',
+			'libs/php-date-formatter/js/php-date-formatter.js',
 			'libs/datetimepicker/js/jquery.datetimepicker.js',
 			'libs/underscore/js/underscore-min.js',
 			'libs/moment/js/moment.min.js',
