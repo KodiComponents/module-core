@@ -45,6 +45,7 @@ return [
     'messages' => [
         'model_not_found' => 'Объект не найден',
         'route_not_found' => 'Страница не найдена',
+        'no_access' => 'У вас нет прав доступа к текущей странице',
         'cache_clear' => 'Кеш очищен',
         'are_you_sure' => 'Вы уверены?',
         'new_version' => 'Имеется более новая версия системы (:version)',
