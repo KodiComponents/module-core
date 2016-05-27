@@ -29,7 +29,9 @@
     "x-editable": "latest",
     "bootstrap-toggle": "latest",
     "bootbox": "latest",
-    "jsdiff": "latest"
+    "jsdiff": "latest",
+    "vue": "latest",
+    "vue-resource": "latest"
   },
   "install": {
     "base": "public/cms/libs",

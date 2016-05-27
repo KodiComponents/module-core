@@ -14,7 +14,6 @@ process.env.DISABLE_NOTIFIER = true;
  |
  */
 
-
 elixir(function(mix) {
 	mix
 		.less('common.less', 'public/cms/css')
@@ -41,7 +40,9 @@ elixir(function(mix) {
 			'libs/slimScroll/js/jquery.slimscroll.min.js',
 			'libs/jquery-query-object/js/jquery.query-object.js',
 			'libs/bootbox.js/js/bootbox.js',
-			'libs/i18next/js/i18next.min.js'
+			'libs/i18next/js/i18next.min.js',
+			'libs/vue/js/vue.js',
+			'libs/vue-resource/js/vue-resource.js'
 		], 'public/cms/js/libraries.js', 'public/cms/');
 
 	/**************************************************************
@@ -120,77 +121,5 @@ elixir(function(mix) {
 		], 'public/cms/libs/query-builder/query-builder.js', 'resources/assets/js/query-builder')
 		.less(
 			'query-builder/default.less', 'public/cms/libs/query-builder/query-builder.css'
-		);
-
-	/**************************************************************
-	 * elFinder
-	 **************************************************************/
-	mix
-		.scripts([
-			'elfinder.js',
-			'elFinder.version.js',
-			'jquery.elfinder.js',
-			'elFinder.options.js',
-			'elFinder.history.js',
-			'elFinder.command.js',
-			'elFinder.resources.js',
-			'jquery.dialogelfinder.js',
-			'elfinder.en.js',
-			'ui/button.js',
-			'ui/contextmenu.js',
-			'ui/cwd.js',
-			'ui/dialog.js',
-			'ui/navbar.js',
-			'ui/overlay.js',
-			'ui/panel.js',
-			'ui/path.js',
-			'ui/places.js',
-			'ui/searchbutton.js',
-			'ui/sortbutton.js',
-			'ui/stat.js',
-			'ui/toolbar.js',
-			'ui/tree.js',
-			'ui/uploadButton.js',
-			'ui/viewbutton.js',
-			'ui/workzone.js',
-			'commands/archive.js',
-			'commands/back.js',
-			'commands/copy.js',
-			'commands/cut.js',
-			'commands/download.js',
-			'commands/duplicate.js',
-			'commands/edit.js',
-			'commands/extract.js',
-			'commands/forward.js',
-			'commands/getfile.js',
-			'commands/help.js',
-			'commands/home.js',
-			'commands/info.js',
-			'commands/mkdir.js',
-			'commands/mkfile.js',
-			'commands/netmount.js',
-			'commands/open.js',
-			'commands/paste.js',
-			'commands/quicklook.js',
-			'commands/quicklook/audio.js',
-			'commands/quicklook/flash.js',
-			'commands/quicklook/images.js',
-			'commands/quicklook/pdf.js',
-			'commands/quicklook/text.js',
-			'commands/quicklook/video.js',
-			'commands/quicklook/browser.media.js',
-			'commands/reload.js',
-			'commands/rename.js',
-			'commands/resize.js',
-			'commands/rm.js',
-			'commands/search.js',
-			'commands/sort.js',
-			'commands/up.js',
-			'commands/upload.js',
-			'commands/view.js',
-			'elfinder.end.js'
-		], 'public/cms/libs/elfinder/js/elfinder.min.js', 'resources/assets/js/elfinder')
-		.styles(
-			['elfinder.full.css'], 'public/cms/libs/elfinder/css/elfinder.min.css', 'public/cms/libs/elfinder/css/'
 		);
 });
