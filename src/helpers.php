@@ -8,6 +8,11 @@ function cms_installed()
     return app('cms')->isInstalled();
 }
 
+function is_backend()
+{
+    return app('cms')->isBackend();
+}
+
 /**
  * @return string
  */

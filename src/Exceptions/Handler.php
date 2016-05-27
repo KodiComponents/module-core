@@ -8,7 +8,6 @@ use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
-use KodiCMS\API\Http\Response as APIResponse;
 use KodiCMS\CMS\Http\Controllers\ErrorController;
 
 class Handler extends \App\Exceptions\Handler
@@ -27,24 +26,24 @@ class Handler extends \App\Exceptions\Handler
     {
         $this->dontReport[] = ValidationException::class;
 
-        return parent::report($e);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  Exception                $e
+     * @param  Exception $e
      *
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
     {
-        if ($request->ajax() or ($e instanceof \KodiCMS\API\Exceptions\Exception)) {
+        if ((($request->ajax() && ! $request->pjax()) || $request->wantsJson())) {
             return $this->sendResponseForApiException($e);
         }
 
-        if (\CMS::isBackend()) {
+        if (is_backend()) {
             if ($e instanceof ModelNotFoundException) {
                 return $this->sendResponseForModelNotFound($e);
             }
@@ -62,11 +61,11 @@ class Handler extends \App\Exceptions\Handler
     /**
      * @param Exception $e
      *
-     * @return APIResponse
+     * @return \KodiCMS\API\Http\Response
      */
     protected function sendResponseForApiException(Exception $e)
     {
-        return (new APIResponse(config('app.debug')))->createExceptionResponse($e);
+        return (new \KodiCMS\API\Http\Response(config('app.debug')))->createExceptionResponse($e);
     }
 
     /**
@@ -126,7 +125,7 @@ class Handler extends \App\Exceptions\Handler
     }
 
     /**
-     * @param Request             $request
+     * @param Request $request
      * @param ValidationException $e
      *
      * @return Response

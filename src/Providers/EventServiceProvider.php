@@ -5,11 +5,6 @@ namespace KodiCMS\CMS\Providers;
 use Config;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as BaseEventServiceProvider;
-use KodiCMS\CMS\Events\BackendSettingsSave;
-use KodiCMS\CMS\Events\BackendSettingsValidate;
-use KodiCMS\CMS\Helpers\DatabaseConfig;
-use KodiCMS\CMS\Listeners\BackendSettingsSaveListener;
-use KodiCMS\CMS\Listeners\BackendSettingsValidateListener;
 use PDOException;
 use Profiler;
 use WYSIWYG;
@@ -23,11 +18,11 @@ class EventServiceProvider extends BaseEventServiceProvider
      * @var array
      */
     protected $listen = [
-        BackendSettingsValidate::class => [
-            BackendSettingsValidateListener::class,
+        \KodiCMS\CMS\Events\BackendSettingsValidate::class => [
+            \KodiCMS\CMS\Listeners\BackendSettingsValidateListener::class,
         ],
-        BackendSettingsSave::class => [
-            BackendSettingsSaveListener::class,
+        \KodiCMS\CMS\Events\BackendSettingsSave::class => [
+            \KodiCMS\CMS\Listeners\BackendSettingsSaveListener::class,
         ],
     ];
 
@@ -69,7 +64,7 @@ class EventServiceProvider extends BaseEventServiceProvider
         $events->listen('config.loaded', function () {
             if (cms_installed()) {
                 try {
-                    $databaseConfig = new DatabaseConfig;
+                    $databaseConfig = new \KodiCMS\CMS\Helpers\DatabaseConfig();
                     $this->app->instance('config.database', $databaseConfig);
 
                     $config = $databaseConfig->getAll();

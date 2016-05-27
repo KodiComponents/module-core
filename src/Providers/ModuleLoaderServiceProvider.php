@@ -2,39 +2,23 @@
 
 namespace KodiCMS\CMS\Providers;
 
-use Collective\Html\FormFacade;
-use Collective\Html\HtmlFacade;
-use KodiCMS\CMS\Navigation\Page;
-use KodiCMS\Support\Facades\CMS;
-use KodiCMS\Support\Facades\Wysiwyg;
-use KodiCMS\Support\Helpers\Profiler;
 use Illuminate\Foundation\AliasLoader;
-use KodiCMS\CMS\Navigation\Navigation;
-use KodiCMS\Assets\AssetsServiceProvider;
-use KodiCMS\Support\Loader\ModulesLoader;
-use KodiCMS\Support\Facades\DatabaseConfig;
-use KodiCMS\ModulesLoader\ModulesFileSystem;
-use KodiCMS\Support\Html\HtmlServiceProvider;
-use KodiCMS\ModulesLoader\ModulesLoaderFacade;
-use KodiCMS\ModulesLoader\ModulesFileSystemFacade;
-use KodiCMS\ModulesLoader\Providers\AppServiceProvider;
-use KodiCMS\ModulesLoader\Providers\RouteServiceProvider;
-use KodiCMS\ModulesLoader\Providers\ConfigServiceProvider;
 use KodiCMS\ModulesLoader\Providers\ModuleServiceProvider as BaseModuleServiceProvider;
 
 class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
 {
+
     /**
      * Providers to register.
      * @var array
      */
     protected $providers = [
-        10 => RouteServiceProvider::class,
+        10 => \KodiCMS\ModulesLoader\Providers\RouteServiceProvider::class,
         20 => EventServiceProvider::class,
-        30 => AppServiceProvider::class,
-        40 => ConfigServiceProvider::class,
-        60 => AssetsServiceProvider::class,
-        70 => HtmlServiceProvider::class,
+        30 => \KodiCMS\ModulesLoader\Providers\AppServiceProvider::class,
+        40 => \KodiCMS\ModulesLoader\Providers\ConfigServiceProvider::class,
+        60 => \KodiCMS\Assets\AssetsServiceProvider::class,
+        70 => \KodiCMS\Support\Html\HtmlServiceProvider::class,
     ];
 
     /**
@@ -66,15 +50,15 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
     protected function registerAliases()
     {
         AliasLoader::getInstance([
-            'ModulesLoader'     => ModulesLoaderFacade::class,
-            'ModulesFileSystem' => ModulesFileSystemFacade::class,
-            'CMS'               => CMS::class,
-            'DatabaseConfig'    => DatabaseConfig::class,
-            'Profiler'          => Profiler::class,
-            'WYSIWYG'           => Wysiwyg::class,
-            'Form'              => FormFacade::class,
-            'HTML'              => HtmlFacade::class,
-            'Navigation'        => \KodiCMS\Support\Facades\Navigation::class
+            'ModulesLoader' => \KodiCMS\ModulesLoader\ModulesLoaderFacade::class,
+            'ModulesFileSystem' => \KodiCMS\ModulesLoader\ModulesFileSystemFacade::class,
+            'CMS' => \KodiCMS\Support\Facades\CMS::class,
+            'DatabaseConfig' => \KodiCMS\Support\Facades\DatabaseConfig::class,
+            'Profiler' => \KodiCMS\Support\Helpers\Profiler::class,
+            'WYSIWYG' => \KodiCMS\Support\Facades\Wysiwyg::class,
+            'Form' => \Collective\Html\FormFacade::class,
+            'HTML' => \Collective\Html\HtmlFacade::class,
+            'Navigation' => \KodiCMS\Support\Facades\Navigation::class,
         ]);
     }
 
@@ -93,12 +77,12 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
             $modules = [
                 'API' => [
                     'namespace' => '\\KodiCMS\\API\\',
-                    'path'      => base_path('vendor'.DIRECTORY_SEPARATOR.'kodicms'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR)
+                    'path' => base_path('vendor'.DIRECTORY_SEPARATOR.'kodicms'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR),
                 ],
                 'CMS' => [
                     'namespace' => '\\KodiCMS\\CMS\\',
-                    'path'      => base_path('vendor'.DIRECTORY_SEPARATOR.'kodicms'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR)
-                ]
+                    'path' => base_path('vendor'.DIRECTORY_SEPARATOR.'kodicms'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR),
+                ],
             ];
 
             $modules = array_merge($modules, config('app.modules', []));
@@ -107,20 +91,20 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
                 $modules = array_merge($modules, include $path);
             }
 
-            return new ModulesLoader($modules);
+            return new \KodiCMS\Support\Loader\ModulesLoader($modules);
         });
 
         $this->app->singleton('modules.filesystem', function ($app) {
-            return new ModulesFileSystem($app['modules.loader'], $app['files']);
+            return new \KodiCMS\ModulesLoader\ModulesFileSystem($app['modules.loader'], $app['files']);
         });
     }
 
     private function registerBackendNavigation()
     {
-        $this->app->bind(\KodiComponents\Navigation\Contracts\PageInterface::class, Page::class);
+        $this->app->bind(\KodiComponents\Navigation\Contracts\PageInterface::class, \KodiCMS\CMS\Navigation\Page::class);
 
         $this->app->singleton('navigation', function () {
-            return new Navigation();
+            return new \KodiCMS\CMS\Navigation\Navigation();
         });
     }
 }
