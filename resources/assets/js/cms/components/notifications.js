@@ -54,7 +54,7 @@ CMS.Notifications = {
 	},
 	showEmptyMessage: function() {
 		this.emptyMessageShowed = true;
-		this.getContainer().append($('<div class="popover-content bg-info">' + i18n.t('notifications.core.no_unread_messages') + '</div>'));
+		this.getContainer().append($('<div class="popover-content bg-info">' + trans('notifications.core.no_unread_messages') + '</div>'));
 	},
 	removeEmptyMessage: function() {
 		this.emptyMessageShowed = false;

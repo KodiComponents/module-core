@@ -53,7 +53,7 @@ CMS.ui.add('flags', function () {
 	$('body').on('click', '.btn-confirm', function (e) {
 		var $btn = $(this);
 
-		var message = i18n.t('cms.core.messages.are_you_sure');
+		var message = trans('cms.core.messages.are_you_sure');
 		if ($btn.data('message')) {
 			message = $btn.data('message');
 		}
@@ -70,7 +70,7 @@ CMS.ui.add('flags', function () {
 }).add('panel-toggler', function () {
 	var icon_open = 'fa-chevron-up',
 		icon_close = 'fa-chevron-down',
-		text = i18n.t('cms.core.label.toggler_close');
+		text = trans('cms.core.label.toggler_close');
 
 	$('.panel-toggler')
 		.click(function () {
@@ -89,30 +89,30 @@ CMS.ui.add('flags', function () {
 
 				if ($(this).is(':hidden')) {
 					$icon.removeClass(icon_open).addClass(icon_close).addClass('fa');
-					$text.text(i18n.t('cms.core.label.toggler_close'));
-					if(hash) CMS.hashString.removeParam('toggled', hash);
+					$text.text(trans('cms.core.label.toggler_close'));
+					if (hash) CMS.hashString.removeParam('toggled', hash);
 				} else {
 					$icon.addClass(icon_open).removeClass(icon_close).addClass('fa');
-					$text.text(i18n.t('cms.core.label.toggler_open'));
-					if(hash) CMS.hashString.setParam('toggled[]', hash);
+					$text.text(trans('cms.core.label.toggler_open'));
+					if (hash) CMS.hashString.setParam('toggled[]', hash);
 				}
 			});
 
 			return false;
 		}).each(function () {
-			var $self = $(this),
-				hash = $self.data('hash');
+		var $self = $(this),
+			hash = $self.data('hash');
 
-			if (CMS.hashString.findInParam('toggled', hash)) {
-				$self.click();
-			}
-		})
+		if (CMS.hashString.findInParam('toggled', hash)) {
+			$self.click();
+		}
+	})
 		.append('' +
 			'<div class="panel-heading-controls">' +
-				'<span class="text-sm">' +
-					'<i class="panel-toggler-icon fa ' + icon_close + '" />' +
-					'&nbsp;&nbsp;&nbsp;<span class="panel-toggler-text">' + text + '</span>' +
-				'</span>' +
+			'<span class="text-sm">' +
+			'<i class="panel-toggler-icon fa ' + icon_close + '" />' +
+			'&nbsp;&nbsp;&nbsp;<span class="panel-toggler-text">' + text + '</span>' +
+			'</span>' +
 			'</div>');
 
 }).add('datepicker', function () {
@@ -485,16 +485,30 @@ CMS.ui.add('flags', function () {
 		timeout: 3000
 	});
 })
-.add('momentJs', function () {
-	moment.locale(LOCALE);
-})
-.add('switcher', function () {
-	$(".form-switcher").bootstrapToggle();
-})
-.add('bootbox', function () {
-	bootbox.setLocale(LOCALE);
-})
-.add('bootstrap', function () {
-	$('[data-toggle="tooltip"]').tooltip();
-	$('[data-toggle="popover"]').popover();
-});
+	.add('momentJs', function () {
+		moment.locale(LOCALE);
+	})
+	.add('switcher', function () {
+		$(".form-switcher").bootstrapToggle();
+	})
+	.add('bootbox', function () {
+		bootbox.setLocale(LOCALE);
+	})
+	.add('bootstrap', function () {
+		$('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="popover"]').popover();
+	})
+	.add('vue', function () {
+
+		/**
+		 * Load Vue HTTP Interceptors.
+		 */
+		Vue.http.interceptors.push(function () {
+			return {
+				request: function (request) {
+					request.headers['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
+					return request;
+				}
+			}
+		});
+	});

@@ -6,16 +6,14 @@
     "bootstrap": "latest",
     "ckeditor": "latest",
     "colorbox": "latest",
-
     "datetimepicker": "latest",
     "php-date-formatter": "latest",
     "moment": "latest",
-
     "dropzone": "latest",
     "fastclick": "latest",
     "fontawesome": "latest",
     "gridster": "latest",
-    "i18next": "latest",
+    "i18next": "1.9.0",
     "jquery": "latest",
     "jquery.cookie": "latest",
     "jquery.steps": "latest",
@@ -55,82 +53,82 @@
     },
     "sources": {
       "backbone": [
-        "public/libs/backbone/backbone-min.js",
-        "public/libs/backbone/backbone-min.map"
+        "bower_components/backbone/backbone-min.js",
+        "bower_components/backbone/backbone-min.map"
       ],
       "underscore": [
-        "public/libs/underscore/underscore-min.js",
-        "public/libs/underscore/underscore-min.map"
+        "bower_components/underscore/underscore-min.js",
+        "bower_components/underscore/underscore-min.map"
       ],
       "bootstrap": [
-        "public/libs/bootstrap/dist/css/**",
-        "public/libs/bootstrap/dist/js/**",
-        "public/libs/bootstrap/fonts/**",
-        "public/libs/bootstrap/less/**"
+        "bower_components/bootstrap/dist/css/**",
+        "bower_components/bootstrap/dist/js/**",
+        "bower_components/bootstrap/fonts/**",
+        "bower_components/bootstrap/less/**"
       ],
       "datetimepicker": [
-        "public/libs/datetimepicker/jquery.datetimepicker.css",
-        "public/libs/datetimepicker/jquery.datetimepicker.js"
+        "bower_components/datetimepicker/jquery.datetimepicker.css",
+        "bower_components/datetimepicker/jquery.datetimepicker.js"
       ],
       "fontawesome": [
-        "public/libs/fontawesome/css/**",
-        "public/libs/fontawesome/fonts/**",
-        "public/libs/fontawesome/less/**"
+        "bower_components/fontawesome/css/**",
+        "bower_components/fontawesome/fonts/**",
+        "bower_components/fontawesome/less/**"
       ],
       "gridster": [
-        "public/libs/gridster/dist/**"
+        "bower_components/gridster/dist/**"
       ],
       "dropzone": [
-        "public/libs/dropzone/dist/min/**"
+        "bower_components/dropzone/dist/min/**"
       ],
       "i18next": [
-        "public/libs/i18next/i18next.min.js"
+        "bower_components/i18next/i18next.min.js"
       ],
       "jquery": [
-        "public/libs/jquery/dist/jquery.min.js",
-        "public/libs/jquery/dist/jquery.min.map"
+        "bower_components/jquery/dist/jquery.min.js",
+        "bower_components/jquery/dist/jquery.min.map"
       ],
       "jquery.steps": [
-        "public/libs/jquery.steps/build/jquery.steps.min.js"
+        "bower_components/jquery.steps/build/jquery.steps.min.js"
       ],
       "jquery-query-object": [
-        "public/libs/jquery-query-object/jquery.query-object.js"
+        "bower_components/jquery-query-object/jquery.query-object.js"
       ],
       "jquery-ui": [
-        "public/libs/jquery-ui/jquery-ui.min.js",
-        "public/libs/jquery-ui/themes/smoothness/*.*"
+        "bower_components/jquery-ui/jquery-ui.min.js",
+        "bower_components/jquery-ui/themes/smoothness/*.*"
       ],
       "jquery-validation": [
-        "public/libs/jquery-validation/dist/*.*",
-        "public/libs/jquery-validation/src/localization/**"
+        "bower_components/jquery-validation/dist/*.*",
+        "bower_components/jquery-validation/src/localization/**"
       ],
       "moment": [
-        "public/libs/moment/min/*.*",
-        "public/libs/moment/locale/**"
+        "bower_components/moment/min/*.*",
+        "bower_components/moment/locale/**"
       ],
       "nestable": [
-        "public/libs/nestable/jquery.nestable.js"
+        "bower_components/nestable/jquery.nestable.js"
       ],
       "noty": [
-        "public/libs/noty/js/noty/packaged/*.*"
+        "bower_components/noty/js/noty/packaged/*.*"
       ],
       "select2": [
-        "public/libs/select2/dist/css/*.*",
-        "public/libs/select2/dist/js/**"
+        "bower_components/select2/dist/css/*.*",
+        "bower_components/select2/dist/js/**"
       ],
       "Sortable": [
-        "public/libs/Sortable/jquery.binding.js",
-        "public/libs/Sortable/Sortable.min.js"
+        "bower_components/Sortable/jquery.binding.js",
+        "bower_components/Sortable/Sortable.min.js"
       ],
       "x-editable": [
-        "public/libs/x-editable/dist/bootstrap3-editable/css/**",
-        "public/libs/x-editable/dist/bootstrap3-editable/img/**",
-        "public/libs/x-editable/dist/bootstrap3-editable/js/**"
+        "bower_components/x-editable/dist/bootstrap3-editable/css/**",
+        "bower_components/x-editable/dist/bootstrap3-editable/img/**",
+        "bower_components/x-editable/dist/bootstrap3-editable/js/**"
       ],
       "colorbox": [
-        "public/libs/colorbox/jquery.colorbox.js",
-        "public/libs/colorbox/jquery.colorbox-min.js",
-        "public/libs/colorbox/example3/images/*.*"
+        "bower_components/colorbox/jquery.colorbox.js",
+        "bower_components/colorbox/jquery.colorbox-min.js",
+        "bower_components/colorbox/example3/images/*.*"
       ]
     }
   }

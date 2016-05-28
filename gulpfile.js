@@ -60,6 +60,7 @@ elixir(function(mix) {
 			'cms/components/filemanager.js',
 			'cms/components/controllers.js',
 			'cms/components/ui.js',
+			'cms/components/i18n.js',
 			'cms/helpers.js',
 			'cms/ui.js',
 			'cms/hashString.js',
