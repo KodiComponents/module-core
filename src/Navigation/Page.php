@@ -105,11 +105,4 @@ class Page extends \KodiComponents\Navigation\Page
     {
         return parent::render('cms::navigation.page');
     }
-
-    public function filterEmptyPages()
-    {
-        $this->items = $this->getPages()->filter(function(PageInterface $page) {
-            return !(is_null($page->getUrl()) and ! $page->hasChild());
-        });
-    }
 }
