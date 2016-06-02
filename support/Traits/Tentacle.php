@@ -10,8 +10,8 @@ trait Tentacle
     protected static $tentacles = [];
 
     /**
-     * @param atring $method
-     * @param arraay $parameters
+     * @param string $method
+     * @param array $parameters
      *
      * @return mixed
      */
@@ -34,6 +34,14 @@ trait Tentacle
     public static function addRelation($name, callable $function)
     {
         static::$tentacles[$name] = $function;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomRelations()
+    {
+        return array_keys(static::$tentacles);
     }
 
     /**
