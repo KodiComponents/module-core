@@ -13,6 +13,14 @@ use HTML;
 class UI
 {
     /**
+     * @return array
+     */
+    public static function icons()
+    {
+        return array_unique(config('icons', []));
+    }
+
+    /**
      * @param string $name
      * @param array  $attributes
      *
