@@ -2,7 +2,6 @@
 
 namespace KodiCMS\CMS\Exceptions;
 
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Http\Request;
@@ -22,8 +21,11 @@ class Handler extends \App\Exceptions\Handler
      *
      * @return void
      */
-    public function report(Exception $e)
+    public function report(\Exception $e)
     {
+        $this->dontReport[] = 'KodiCMS\Pages\Exceptions\PageNotFoundException';
+        $this->dontReport[] = PermissionsException::class;
+        $this->dontReport[] = 'KodiCMS\API\Exceptions\PermissionException';
         $this->dontReport[] = ValidationException::class;
 
         parent::report($e);
@@ -33,11 +35,11 @@ class Handler extends \App\Exceptions\Handler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  Exception $e
+     * @param  \Exception $e
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, \Exception $e)
     {
         if ((($request->ajax() && ! $request->pjax()) || $request->wantsJson())) {
             return $this->sendResponseForApiException($e);
@@ -59,11 +61,11 @@ class Handler extends \App\Exceptions\Handler
     }
 
     /**
-     * @param Exception $e
+     * @param \Exception $e
      *
      * @return \KodiCMS\API\Http\Response
      */
-    protected function sendResponseForApiException(Exception $e)
+    protected function sendResponseForApiException(\Exception $e)
     {
         return (new \KodiCMS\API\Http\Response(config('app.debug')))->createExceptionResponse($e);
     }
@@ -71,11 +73,11 @@ class Handler extends \App\Exceptions\Handler
     /**
      * Render an exception using ErrorController.
      *
-     * @param  Exception $e
+     * @param \Exception $e
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderControllerException(Exception $e)
+    protected function renderControllerException(\Exception $e)
     {
         $code = 500;
 
