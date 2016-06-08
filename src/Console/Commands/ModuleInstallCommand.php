@@ -45,6 +45,18 @@ class ModuleInstallCommand extends Command
      */
     public function fire(Filesystem $files)
     {
+        $this->comment(' _  __         _ _  ____ __  __ ____');
+        $this->comment('| |/ /___   __| (_)/ ___|  \/  / ___| ');
+        $this->comment('| \' // _ \ / _` | | |   | |\/| \___ \ ');
+        $this->comment('| . \ (_) | (_| | | |___| |  | |___) |');
+        $this->comment('|_|\_\___/ \__,_|_|\____|_|  |_|____/ ');
+
+        $this->line('');
+
+        // Copyright
+        $this->comment('Version ' . \CMS::getFullName() . ' - Created by butschster');
+        $this->line('');
+
         $this->files = $files;
 
         $moduleInfo = [];
