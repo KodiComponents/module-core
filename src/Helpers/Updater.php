@@ -209,6 +209,7 @@ class Updater
         while (fgets($handle)) {
             $count++;
         }
+        
         fclose($handle);
 
         return $count;

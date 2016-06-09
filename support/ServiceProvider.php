@@ -16,7 +16,9 @@ abstract class ServiceProvider extends BaseServiceProvider
      */
     public function registerConsoleCommand($class)
     {
-        $this->commands($class);
+        if ($this->app->runningInConsole()) {
+            $this->commands($class);
+        }
     }
 
     /**

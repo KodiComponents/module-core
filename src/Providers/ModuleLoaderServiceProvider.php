@@ -41,7 +41,10 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
 
         $this->registerAliases();
         $this->registerProviders();
-        $this->registerConsoleCommands();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands($this->commands);
+        }
     }
 
     /**

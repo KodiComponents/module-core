@@ -5,9 +5,8 @@ namespace KodiCMS\CMS\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use KodiCMS\CMS\Contracts\RepositoryInterface;
 
-class BaseRepository implements RepositoryInterface
+class BaseRepository implements \KodiCMS\CMS\Contracts\Repositories\BaseRepository
 {
     use ValidatesRequests;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace KodiCMS\CMS\Contracts;
+namespace KodiCMS\CMS\Contracts\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-interface RepositoryInterface
+interface BaseRepository
 {
     /**
      * @return Model
