@@ -18,11 +18,14 @@ class EventServiceProvider extends BaseEventServiceProvider
      * @var array
      */
     protected $listen = [
-        \KodiCMS\CMS\Events\BackendSettingsValidate::class => [
-            \KodiCMS\CMS\Listeners\BackendSettingsValidateListener::class,
+        'KodiCMS\CMS\Events\BackendSettingsValidate' => [
+            'KodiCMS\CMS\Listeners\BackendSettingsValidateListener',
         ],
-        \KodiCMS\CMS\Events\BackendSettingsSave::class => [
-            \KodiCMS\CMS\Listeners\BackendSettingsSaveListener::class,
+        'KodiCMS\CMS\Events\BackendSettingsSave' => [
+            'KodiCMS\CMS\Listeners\BackendSettingsSaveListener',
+        ],
+        'KodiCMS\CMS\Events\NotificationCreated' => [
+
         ],
     ];
 
