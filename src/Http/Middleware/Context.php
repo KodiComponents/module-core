@@ -22,8 +22,8 @@ class Context
     {
         if (is_null($context)) {
             $context = ($request->is(backend_url_segment()) or $request->is(backend_url_segment().'/*'))
-                ? 'backend'
-                : 'frontend';
+                ? \KodiCMS\CMS\CMS::CONTEXT_BACKEND
+                : \KodiCMS\CMS\CMS::CONTEXT_FRONTEND;
         }
 
         $contexts = explode('|', $context);

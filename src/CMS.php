@@ -2,11 +2,15 @@
 
 namespace KodiCMS\CMS;
 
-use Illuminate\Support\Str;
+use KodiCMS\CMS\Configuration\ManagesAuthOptions;
+use KodiCMS\CMS\Configuration\ManagesContext;
+use KodiCMS\CMS\Configuration\ManagesModelOptions;
 
 class CMS
 {
-
+    use ManagesModelOptions,
+        ManagesContext;
+    
     const VERSION = '0.5.1 beta';
     const NAME    = 'KodiCMS';
     const WEBSITE = 'http://kodicms.com';
@@ -14,16 +18,7 @@ class CMS
     const CMS_PREFIX = 'cms';
 
     const CONTEXT_BACKEND = 'backend';
-
-    /**
-     * @var array
-     */
-    protected $context = [];
-
-    /**
-     * @var array
-     */
-    protected $contextInited = [];
+    const CONTEXT_FRONTEND = 'frontend';
 
     /**
      * @return string
@@ -129,46 +124,6 @@ class CMS
     public function backendResourcesUrl($path = null)
     {
         return $this->backendUrl(static::CMS_PREFIX.$this->trimPath($path));
-    }
-
-    /**
-     * @param string $context
-     *
-     * @return $this
-     */
-    public function setContext($context)
-    {
-        if (! $this->contextExists($context)) {
-            $this->context[] = $context;
-
-            foreach (app('modules.loader')->getRegisteredModules() as $module) {
-                if (! is_null($provider = $module->getProvider())) {
-                    if (method_exists($provider, $method = 'context'.Str::studly($context))) {
-                        app()->call([$provider, $method]);
-                    }
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @param string $context
-     *
-     * @return bool
-     */
-    public function contextExists($context)
-    {
-        return in_array($context, $this->context);
     }
 
     /**
