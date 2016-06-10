@@ -19,6 +19,7 @@ class ModuleLoaderServiceProvider extends BaseModuleServiceProvider
         40 => \KodiCMS\ModulesLoader\Providers\ConfigServiceProvider::class,
         60 => \KodiCMS\Assets\AssetsServiceProvider::class,
         70 => \KodiCMS\Support\Html\HtmlServiceProvider::class,
+        100 => \Intervention\Image\ImageServiceProviderLaravel5::class,
     ];
 
     /**
