@@ -59,15 +59,15 @@ class TemplateController extends Controller
         if ($this->autoRender === true) {
             $this->registerMedia();
         }
-
-        View::share('controllerAction', $this->getCurrentAction());
-        View::share('currentUser', $this->currentUser);
-        View::share('requestType', $this->requestType);
     }
 
     public function after()
     {
         parent::after();
+
+        View::share('controllerAction', $this->getCurrentAction());
+        View::share('currentUser', $this->currentUser);
+        View::share('requestType', $this->requestType);
 
         if ($this->autoRender === true) {
             if ($this->onlyContent) {
