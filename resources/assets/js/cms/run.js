@@ -14,8 +14,8 @@ $(function () {
 		CMS.Notifications.init();
 	});
 
-	window.App = new Vue({
-		el: 'body',
+	new Vue({
+		el: '#notifications',
 		data: function () {
 			return {
 				loadingNotifications: false,
@@ -24,7 +24,8 @@ $(function () {
 		},
 		created: function () {
 			var self = this;
-			$('#notifications')
+
+			$(this.$el)
 				.on('hidden.bs.dropdown', function () {
 					$('.notifications-list').slimScroll({ destroy: true });
 					self.markNotificationsAsRead();
