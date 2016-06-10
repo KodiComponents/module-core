@@ -7,7 +7,7 @@
 	<div class="navbar-inner">
 
 		<div class="navbar-header">
-			{!! link_to(backend_url_segment(), 'KodiCMS', ['class' => 'navbar-brand']); !!}
+			{!! link_to(backend_url_segment(), config('cms.logo'), ['class' => 'navbar-brand']) !!}
 		</div>
 
 		<div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">

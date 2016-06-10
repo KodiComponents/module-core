@@ -24,14 +24,9 @@
 }
 
 .navbar-brand {
-	background-image: ~"url('@{images-path}/logo-color.png')";
-	background-repeat: no-repeat;
-	background-position: left center;
-	width: 119px;
-	text-indent: -9999px;
-	margin-left: 0;
-	margin-right: 10px;
-	
+	line-height: 20px !important;
+	padding-top: 5px !important;
+
 	.theme-asphalt &,
 	.theme-purple-hills &,
 	.theme-adminflare &,
@@ -39,7 +34,9 @@
 	.theme-dust &,
 	.theme-frost &,
 	.theme-clean & {
-		background-image: ~"url('@{images-path}/logo.png')";
+		svg {
+			fill: #fff;
+		}
 	}
 }
 
