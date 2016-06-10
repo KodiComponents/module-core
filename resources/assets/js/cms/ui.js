@@ -1,5 +1,5 @@
-CMS.ui.add('flags', function () {
-	$('body').on('click', '.flags .label', function (e) {
+CMS.ui.add('flags', function ($contaier) {
+	$contaier.on('click', '.flags .label', function (e) {
 		var $src = $(this).parent().data('target');
 		if (!$src) $src = $(this).parent().prevAll(':input');
 		else $src = $($src);
@@ -49,8 +49,8 @@ CMS.ui.add('flags', function () {
 
 		e.preventDefault();
 	});
-}).add('btn-confirm', function () {
-	$('body').on('click', '.btn-confirm', function (e) {
+}).add('btn-confirm', function ($contaier) {
+	$contaier.on('click', '.btn-confirm', function (e) {
 		var $btn = $(this);
 
 		var message = trans('cms.core.messages.are_you_sure');
@@ -186,10 +186,10 @@ CMS.ui.add('flags', function () {
 
 		$self.datetimepicker(local_options);
 	});
-}).add('slug', function () {
+}).add('slug', function ($contaier) {
 
 	var slugs = {};
-	$('body').on('keyup', '.slug-generator', function () {
+	$contaier.on('keyup', '.slug-generator', function () {
 		var $slug_cont = $('.slugify');
 
 		if ($(this).data('slug')) {
@@ -220,7 +220,7 @@ CMS.ui.add('flags', function () {
 		}
 	});
 
-	$('body').on('keyup', '.slugify', function () {
+	$contaier.on('keyup', '.slugify', function () {
 		var c = String.fromCharCode(event.keyCode);
 		var isWordcharacter = c.match(/\w/);
 
@@ -294,7 +294,7 @@ CMS.ui.add('flags', function () {
 		tags: true,
 		tokenSeparators: [',', ' ', ';']
 	});
-}).add('filemanager', function () {
+}).add('filemanager', function ($contaier) {
 	var $input = $(':input[data-filemanager]');
 
 	$input.each(function () {
@@ -313,7 +313,7 @@ CMS.ui.add('flags', function () {
 		$self.removeAttr('data-filemanager');
 	})
 
-	$('body').on('click', '.btn-filemanager', function () {
+	$contaier.on('click', '.btn-filemanager', function () {
 		var el = $(this).data('el');
 		var type = $(this).data('type');
 
@@ -406,16 +406,22 @@ CMS.ui.add('flags', function () {
 	});
 }).add('icon', function () {
 	$('*[data-icon]').add('*[data-icon-prepend]').each(function () {
-		var cls = $(this).data('icon');
-		if ($(this).hasClass('btn-labeled')) cls += ' btn-label icon';
+		var $elm = $(this),
+			cls = $elm.data('icon');
 
-		$(this).html('<i class="fa fa-' + cls + '"></i> ' + $(this).html());
-		$(this).removeAttr('data-icon-prepend').removeAttr('data-icon');
+		if ($elm.hasClass('btn-labeled')) cls += ' btn-label icon';
+
+		$elm
+			.html('<i class="fa fa-' + cls + '"></i> ' + $elm.html())
+			.removeAttr('data-icon-prepend')
+			.removeAttr('data-icon');
 	});
 
 	$('*[data-icon-append]').each(function () {
-		$(this).html($(this).html() + '&nbsp&nbsp<i class="fa fa-' + $(this).data('icon-append') + '"></i>');
-		$(this).removeAttr('data-icon-append');
+		var $elm = $(this);
+		$elm
+			.html($elm.html() + '&nbsp&nbsp<i class="fa fa-' +$elm.data('icon-append') + '"></i>')
+			.removeAttr('data-icon-append');
 	});
 }).add('tabbable', function () {
 	$('.tabbable').each(function (i) {
@@ -485,30 +491,36 @@ CMS.ui.add('flags', function () {
 		timeout: 3000
 	});
 })
-	.add('momentJs', function () {
-		moment.locale(LOCALE);
-	})
-	.add('switcher', function () {
-		$(".form-switcher").bootstrapToggle();
-	})
-	.add('bootbox', function () {
-		bootbox.setLocale(LOCALE);
-	})
-	.add('bootstrap', function () {
-		$('[data-toggle="tooltip"]').tooltip();
-		$('[data-toggle="popover"]').popover();
-	})
-	.add('vue', function () {
-
-		/**
-		 * Load Vue HTTP Interceptors.
-		 */
-		Vue.http.interceptors.push(function () {
-			return {
-				request: function (request) {
-					request.headers['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
-					return request;
-				}
-			}
-		});
+.add('momentJs', function () {
+	moment.locale(LOCALE);
+})
+.add('switcher', function () {
+	$(".form-switcher").bootstrapToggle();
+})
+.add('bootbox', function () {
+	bootbox.setLocale(LOCALE);
+})
+.add('bootstrap', function () {
+	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="popover"]').popover();
+})
+.add('vue', function () {
+	/**
+	 * Format the given date into a relative time.
+	 */
+	Vue.filter('relative', function (value) {
+		return moment.utc(value).local().fromNow();
 	});
+
+	/**
+	 * Load Vue HTTP Interceptors.
+	 */
+	Vue.http.interceptors.push(function () {
+		return {
+			request: function (request) {
+				request.headers['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
+				return request;
+			}
+		}
+	});
+});

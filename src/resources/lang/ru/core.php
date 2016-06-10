@@ -52,4 +52,9 @@ return [
         'no_new_version' => 'У вас установлена последняя версия.',
         'update_information' => 'Если система клонирована из репозитория Github, используйте команду <strong>git pull</strong> для обновления',
     ],
+    'notification' => [
+        'field' => [
+            'creator' => 'Автор'
+        ]
+    ]
 ];

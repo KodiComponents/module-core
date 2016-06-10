@@ -20,6 +20,33 @@
 
 						@event('view.navbar.right.before')
 
+						<li class="nav-icon-btn nav-icon-btn-danger dropdown" id="notifications">
+							<a href="#notifications" data-toggle="dropdown">
+								<span class="label">@{{ unreadNotifications }}</span>
+								<i class="nav-icon fa fa-bullhorn"></i>
+								<span class="small-screen-text">Notifications</span>
+							</a>
+							<div class="dropdown-menu widget-notifications no-padding" style="width: 300px">
+								<div class="notifications-list" v-show="hasNotifications">
+									<div class="notification" v-for="notification in notifications" :class="{'read': notification.read}">
+										<div class="notification-description">
+											@{{{ notification.body }}}
+
+											<div class="link" v-if="notification.action_text">
+												<a :href="notification.action_url">@{{ notification.action_text }}</a>
+											</div>
+
+											<div class="creator" v-if="notification.creator">
+												@lang('cms::core.notification.field.creator'): @{{{ notification.creator.name }}}
+											</div>
+										</div>
+										<div class="notification-ago">@{{ notification.created_at | relative }}</div>
+										<div class="notification-icon fa fa-@{{ notification.icon }}"></div>
+									</div>
+								</div>
+							</div>
+						</li>
+
 						@can('system::view_settings')
 						<li>
 							<a href="{{ route('backend.settings') }}">{!! UI::icon('cogs fa-lg') !!}</a>

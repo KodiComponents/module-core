@@ -12,8 +12,8 @@ var CMS = {
 	 * Вычисление высоты контейнера с контентом
 	 */
 	content_height: null,
-	calculateContentHeight: function() {
-		if(this.content_height != null)
+	calculateContentHeight: function () {
+		if (this.content_height != null)
 			return this.content_height;
 
 		var contentCont = $('#content-wrapper'),

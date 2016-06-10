@@ -21,7 +21,6 @@ use KodiCMS\CMS\Events\NotificationCreated;
  * @property string          $action_text
  * @property string          $action_url
  * @property string          $body
- * @property string          $parsed_body
  * @property Carbon          $created_at
  * @property Carbon          $updated_at
  * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereId($value)
@@ -83,17 +82,6 @@ class Notification extends Model
     protected $casts = [
         'read' => 'boolean',
     ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['parsed_body'];
-
-    /**********************************************************************
-     * Mutators
-     **********************************************************************/
 
     /**********************************************************************
      * Relations
