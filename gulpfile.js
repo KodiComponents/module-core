@@ -16,7 +16,7 @@ process.env.DISABLE_NOTIFIER = true;
 
 elixir(function(mix) {
 	mix
-		.less('common.less', 'public/cms/css')
+		.less('common.less', 'public/cms/css/app.css')
 		.less('kodicms/jquery-ui/jquery-ui.less', 'public/cms/css/jquery-ui.css');
 
 	/**************************************************************
