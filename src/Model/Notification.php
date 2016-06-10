@@ -9,8 +9,8 @@ use KodiCMS\CMS\Events\NotificationCreated;
 
 /**
  * Class Notification
- * @package App
  *
+ * @package App
  * @property int             $id
  * @property int             $user_id
  * @property Authenticatable $user
@@ -22,9 +22,20 @@ use KodiCMS\CMS\Events\NotificationCreated;
  * @property string          $action_url
  * @property string          $body
  * @property string          $parsed_body
- *
  * @property Carbon          $created_at
  * @property Carbon          $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereCreatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereIcon($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereBody($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereActionText($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereActionUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereRead($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification unread()
+ * @method static \Illuminate\Database\Query\Builder|\KodiCMS\CMS\Model\Notification forUser($userId)
  */
 class Notification extends Model
 {
