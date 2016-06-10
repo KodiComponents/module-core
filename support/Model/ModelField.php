@@ -458,7 +458,7 @@ abstract class ModelField implements ModelFieldInterface
         if ($value instanceof Model) {
             $value = $value->getAttribute($value->getKeyName());
         } elseif ($value instanceof Collection) {
-            $value = $value->lists('id')->all();
+            $value = $value->pluck('id')->all();
         }
 
         return $value;
