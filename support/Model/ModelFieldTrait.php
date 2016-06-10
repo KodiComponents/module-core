@@ -2,6 +2,7 @@
 
 namespace KodiCMS\Support\Model;
 
+use KodiCMS\Support\Model\Fields\FileField;
 use KodiCMS\Support\Model\Fields\TextField;
 use KodiCMS\Support\Model\Fields\CheckboxField;
 
@@ -105,8 +106,11 @@ trait ModelFieldTrait
                 case 'array':
                 case 'json':
                     break;
-
                 case 'collection':
+                    break;
+                case 'upload':
+                case 'image':
+                return (new FileField($key))->setModel($this);
                     break;
                 case 'int':
                 case 'integer':
