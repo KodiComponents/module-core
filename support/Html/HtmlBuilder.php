@@ -37,7 +37,7 @@ class HtmlBuilder extends \Collective\Html\HtmlBuilder
      *
      * @return string
      */
-    public function link($url, $title = null, $attributes = [], $secure = null)
+    public function link($url, $title = null, $attributes = [], $secure = null, $escape = true)
     {
         $url = $this->url->to($url, [], $secure);
 
